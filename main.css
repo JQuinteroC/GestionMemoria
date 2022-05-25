@@ -1,0 +1,18 @@
+.box{
+    background-color: slateblue;
+    padding: 10px;
+    color: #fff;
+    text-align: center;
+}
+
+.container{
+    grid-template-columns: repeat(3, 1fr);
+    display: grid;
+    column-gap: 10px;
+    height: 98vh;
+}
+
+.memoria{
+    background-color: crimson;
+    height: 820px;
+}
