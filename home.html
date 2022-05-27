@@ -12,26 +12,26 @@
 <body>
     <div class="container">
         <div class="box">
-            <div class="nuevoPrograma">
-                <input type="text" placeholder="Nombre del programa">
-                <input type="text" placeholder="Tamaño">
+            <div class="form">
+                <input type="text" name = "name" autocomplete="off" placeholder="Nombre del programa">
+                <input type="text" id="tamaño" name="tamaño" placeholder="Tamaño">
                 <button>nuevo programa</button>
             </div>
-            <div>Lista de programas</div>
             <div class="Modelo">
-                <select name="" id="">
+                <div class = "titulo">Lista de programas</div>
+                <select name="" id="selecProgramas">
                     <option value="1">dinamica</option>
                     <option value="2">estatica</option>
                 </select>
             </div>
             <div class="ordenamiento">
-                <button type="radio">f</button>
-                <button type="radio">g</button>
-                <button type="radio">d</button>
+                <input type="radio" name ="ordenamiento"><label class="labelOrd" checked = "checked">Mejor ajuste</label><br></input>
+                <input type="radio" name ="ordenamiento"><label class="labelOrd">Peor ajuste</label><br></input>
+                <input type="radio" name ="ordenamiento"><label class="labelOrd">Primer ajuste</label></input>
             </div>
         </div>
         <div class="box">
-            <div>Lista de programas ejecutados</div>
+            <div class="titulo">Lista de programas ejecutados</div>
 
         </div>
         <div class="box">
