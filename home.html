@@ -12,26 +12,20 @@
 <body>
     <div class="container">
         <div class="box">
+            <div class="titulo"> Agregar un programa </div>
             <div class="form">
                 <input type="text" name = "name" autocomplete="off" placeholder="Nombre del programa">
                 <input type="text" id="tamaño" name="tamaño" placeholder="Tamaño">
                 <button>Nuevo programa</button>
             </div>
             <div class="Modelo">
-                <div class = "titulo">Lista de programas</div>
-                <table class="tabla">
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Nombre del proceso</th>
-                            <th>Tamaño del proceso</th>
-                            <th>Encender</th>
-                        </tr>
-                    </thead>
-                </table>
+            <div class="titulo"> Metodos de gestion de memoria </div>
                 <select name="" id="selecProgramas">
-                    <option value="1">dinamica</option>
-                    <option value="2">estatica</option>
+                    <option selected=" " disabled=" "> Selecciona una particion</option>
+                    <option value="1">Dinamica con compactacion</option>
+                    <option value="2">Dinamica sin compactacion</option>
+                    <option value="3">Estatica variable</option>
+                    <option value="4">Estatica fija</option>
                 </select>
             </div>
             <div class="ordenamiento">
@@ -42,6 +36,17 @@
             <button>Empezar</button>
         </div>
         <div class="box">
+            <div class = "titulo">Lista de programas</div>
+            <table class="tabla">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre del proceso</th>
+                        <th>Tamaño del proceso</th>
+                        <th>Encender</th>
+                   </tr>
+                </thead>
+            </table>
             <div class="titulo">Lista de programas ejecutados</div>
             <table class="tabla">
                 <thead>
