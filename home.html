@@ -15,10 +15,20 @@
             <div class="form">
                 <input type="text" name = "name" autocomplete="off" placeholder="Nombre del programa">
                 <input type="text" id="tamaño" name="tamaño" placeholder="Tamaño">
-                <button>nuevo programa</button>
+                <button>Nuevo programa</button>
             </div>
             <div class="Modelo">
                 <div class = "titulo">Lista de programas</div>
+                <table class="tabla">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Nombre del proceso</th>
+                            <th>Tamaño del proceso</th>
+                            <th>Encender</th>
+                        </tr>
+                    </thead>
+                </table>
                 <select name="" id="selecProgramas">
                     <option value="1">dinamica</option>
                     <option value="2">estatica</option>
@@ -29,10 +39,20 @@
                 <input type="radio" name ="ordenamiento"><label class="labelOrd">Peor ajuste</label><br></input>
                 <input type="radio" name ="ordenamiento"><label class="labelOrd">Primer ajuste</label></input>
             </div>
+            <button>Empezar</button>
         </div>
         <div class="box">
             <div class="titulo">Lista de programas ejecutados</div>
-
+            <table class="tabla">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre del proceso</th>
+                        <th>Tamaño del proceso</th>
+                        <th>Apagar</th>
+                    </tr>
+                </thead>
+            </table>
         </div>
         <div class="box">
             <canvas height="820" id="memoria">
