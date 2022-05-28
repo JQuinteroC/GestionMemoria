@@ -128,8 +128,12 @@ function agregarListener() {
     btnNuevoPrograma.addEventListener("click", function () {
         var name = document.getElementsByName("name");
         var size = document.getElementsByName("size");
-        programas.push({ "nombre": name[0].value, "tamano": size[0].value });
-        llenarProgramas();
+        if (name[0].value != "" && size[0].value != ""){
+            programas.push({ "nombre": name[0].value, "tamano": size[0].value });
+            llenarProgramas();
+        } else {
+            console.log("Error en el llenado del formulario");
+        }
     }, false)
 }
 
