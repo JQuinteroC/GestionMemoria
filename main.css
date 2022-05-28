@@ -235,6 +235,9 @@ tr:hover td {
     margin-bottom: 10px;
 }
 
+td button {
+  width: 70px;
+}
 button {
   margin-top: 20px;
   width: 150px;

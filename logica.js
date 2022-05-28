@@ -27,28 +27,54 @@ var programas = [{
     "tamano": 6291456,
 },
 ]
+var programasEjecutados = []
 
 function llenarProgramas() {
     document.getElementById("programas").replaceChildren();
     for (let i = 0; i < programas.length; i++) {
         const programa = programas[i];
 
-        var fila = "<tr><td>" + programa.nombre + "</td><td>" + programa.tamano + "</td><td><button class='btn btnEliminar'" + " value='" + i + "'>Encender</button>" + "</td></tr>";
+        var fila = "<tr><td>" + programa.nombre + "</td><td>" + programa.tamano + "</td><td><button class='btn btnEncender'" + " value='" + i + "'>Encender</button>" + "</td></tr>";
 
         var btn = document.createElement("TR");
         btn.innerHTML = fila;
         document.getElementById("programas").appendChild(btn);
     };
 
-    $('#tablaProgramas').on('click', '.btnEliminar', function (event) {
+    $('#tablaProgramas').on('click', '.btnEncender', function (event) {
 
         var $row = $(this).closest("tr"),
             $tds = $row.find("td");
 
-        $.each($tds, function () {
-            console.log($(this).text());
-        });
+        // confirmar si la memoria alcanza
+        programasEjecutados.push({ "id": programasEjecutados.length + 1, "nombre": $tds[0].textContent, "tamano": $tds[1].textContent });
 
+        llenarEjecutados();
+    });
+}
+
+function llenarEjecutados() {
+    document.getElementById("ejecucion").replaceChildren();
+    for (let i = 0; i < programasEjecutados.length; i++) {
+        const programa = programasEjecutados[i];
+
+        var fila = "<tr><td>" + programa.id + "</td><td>" + programa.nombre + "</td><td>" + programa.tamano + "</td><td><button class='btn btnApagar'" + " value='" + i + "'>Apagar</button>" + "</td></tr>";
+
+        var btn = document.createElement("TR");
+        btn.innerHTML = fila;
+        document.getElementById("ejecucion").appendChild(btn);
+    };
+
+    $('#tablaEjecutados').on('click', '.btnApagar', function (event) {
+        limpiarMemoria();
+        dibujarMemoria();
+        // Dibujar memorias
+        // var $row = $(this).closest("tr"),
+        //     $tds = $row.find("td");
+
+        // $.each($tds, function () {
+        //     console.log($(this).text());
+        // });
     });
 }
 
@@ -58,6 +84,7 @@ function limpiarMemoria() {
 }
 
 function dibujarMemoria() {
+    console.log("se ñañañá otro")
     var canvas = document.getElementById("memoria");
     if (canvas.getContext) {
         var ctx = canvas.getContext("2d");
@@ -80,10 +107,9 @@ function agregarListener() {
     btnNuevoPrograma.addEventListener("click", function () {
         var name = document.getElementsByName("name");
         var size = document.getElementsByName("size");
-        programas.push({ "nombre": name[0].value, "tamano": size[0].value })
+        programas.push({ "nombre": name[0].value, "tamano": size[0].value });
         llenarProgramas();
     }, false)
-
 }
 
 function init() {
