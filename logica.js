@@ -27,6 +27,9 @@ var programas = [{
     "tamano": 6291456,
 },
 ]
+
+var particionesVariables = [4,3,3,2,2,1]
+
 var programasEjecutados = []
 
 function llenarProgramas() {
@@ -139,7 +142,7 @@ function agregarListener() {
             programas.push({ "nombre": name[0].value, "tamano": size[0].value });
             llenarProgramas();
         } else {
-            console.log("Error en el llenado del formulario");
+            alert("Error en el llenado del formulario");
         }
     }, false)
 }
@@ -157,24 +160,36 @@ function gestionarMemoria(){
                 break;
             case "3":
                 console.log("Particionamiento Estatico Variable");
+                //var table = document.createElement("TABLE");
+
+                document.getElementById("contMetodos").replaceChildren();
+                for (let i = 0; i < particionesVariables.length; i++){
+                    console.log(particionesVariables[i]);
+
+                    var fila = "<li>"+ particionesVariables[i] + " Megabit" + "</li>";
+                    var btn = document.createElement("LI");
+                    //table.innerHTML = btn;
+                    btn.innerHTML = fila;
+                    document.getElementById("contMetodos").appendChild(btn);
+
+                }
                 break;
             case "4":
                 console.log("Particionamiento Estatico Fijo");
                 
-                document.getElementById("metodos");
-                var fila = "<input type='text' name='cantidadParticiones' autocomplete='off' placeholder= 'Metodo'></input>";
-                document.write(fila);
-                
-                //var btn = document.createElement("input");
-                btn.innerHTML = fila;
-                document.getElementById("metodos").appendChild(btn);
-                
+                document.getElementById("contMetodos").replaceChildren();
+                const particion = "<input type='text' name='cantidadParticiones' autocomplete='off' placeholder='Numero de particiones'>"+"</input>";
+                var btn = document.createElement("DIV");
+                btn.innerHTML = particion;
+                document.getElementById("contMetodos").appendChild(btn);
+
                 break;
             default:
                 console.log("No se ha seleccionado");
-            
+                break;
+        
         }
-    }) 
+    },false)             
 }
 
 function init() {
