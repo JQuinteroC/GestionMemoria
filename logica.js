@@ -71,8 +71,6 @@ function llenarEjecutados() {
         document.getElementById("ejecucion").appendChild(btn);
     };
 
-    console.log(programasEjecutados)
-
 
     $('#tablaEjecutados').on('click', '.btnApagar', function (event) {
         limpiarMemoria();
@@ -83,7 +81,12 @@ function llenarEjecutados() {
 
         programasEjecutados = removeItemFromArr( programasEjecutados,  $tds[1].textContent);
 
+        for (let i = 0; i < programasEjecutados.length; i++){
+            programasEjecutados[i].id = i + 1
+        }
+
         llenarEjecutados()
+
         //event.target.parentNode.parentNode.remove()
         
         //programasEjecutados.splice
