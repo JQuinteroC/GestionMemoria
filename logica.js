@@ -75,9 +75,21 @@ function dibujarMemoria() {
     }
 }
 
+function agregarListener() {
+    var btnNuevoPrograma = document.getElementById("nuevoPrograma");
+    btnNuevoPrograma.addEventListener("click", function () {
+        var name = document.getElementsByName("name");
+        var size = document.getElementsByName("size");
+        programas.push({ "nombre": name[0].value, "tamano": size[0].value })
+        llenarProgramas();
+    }, false)
+
+}
+
 function init() {
     llenarProgramas();
     dibujarMemoria();
+    agregarListener();
 }
 
 init();
