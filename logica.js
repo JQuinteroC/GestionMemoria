@@ -100,6 +100,13 @@ function llenarEjecutados() {
     });
 }
 
+/*function llenarMetodos(){
+    document.getElementById("metodos").replaceChildren();
+    switch (){
+
+    }
+}*/
+
 function limpiarMemoria() {
     var canvas = document.getElementById("memoria");
     canvas.width = canvas.width;
@@ -137,10 +144,44 @@ function agregarListener() {
     }, false)
 }
 
+function gestionarMemoria(){
+    var optMetodo = document.getElementById("selecProgramas");
+    optMetodo.addEventListener("click", function(){
+        
+        switch (optMetodo.value){
+            case "1":
+                console.log("Particionamiento Dinamico Con Compactacion");
+                break;
+            case "2":
+                console.log("Particionamiento Dinamico Sin Compactacion");
+                break;
+            case "3":
+                console.log("Particionamiento Estatico Variable");
+                break;
+            case "4":
+                console.log("Particionamiento Estatico Fijo");
+                
+                document.getElementById("metodos");
+                var fila = "<input type='text' name='cantidadParticiones' autocomplete='off' placeholder= 'Metodo'></input>";
+                document.write(fila);
+                
+                //var btn = document.createElement("input");
+                btn.innerHTML = fila;
+                document.getElementById("metodos").appendChild(btn);
+                
+                break;
+            default:
+                console.log("No se ha seleccionado");
+            
+        }
+    }) 
+}
+
 function init() {
     llenarProgramas();
     dibujarMemoria();
     agregarListener();
+    gestionarMemoria();
 }
 
 init();
