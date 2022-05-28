@@ -115,6 +115,23 @@ function limpiarMemoria() {
     canvas.width = canvas.width;
 }
 
+function pintarMemoria(posicion, nombre){
+    var canvas = document.getElementById("memoria");
+    if(canvas.getContext){
+        var ctx = canvas.getContext("2d");
+
+        ctx.fillStyle = 'blue';
+        
+        ctx.fillRect(0, posicion * 51, 300, 51);
+
+        ctx.font = "30px Arial";
+
+        ctx.fillStyle = 'black';
+
+        ctx.fillText(nombre, 70, 51*(posicion+1));
+    }
+}
+
 function dibujarMemoria() {
     var canvas = document.getElementById("memoria");
     if (canvas.getContext) {
@@ -195,6 +212,7 @@ function gestionarMemoria(){
 function init() {
     llenarProgramas();
     dibujarMemoria();
+    pintarMemoria(15,"proceso");
     agregarListener();
     gestionarMemoria();
 }
