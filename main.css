@@ -1,104 +1,118 @@
-body{
+body {
   height: 60vh;
   display: flex;
   justify-content: space-around;
   font-family: sans-serif;
 }
 
-.tabla{
-  margin-left: 1px;
-  margin-top: 15px;
+.tabla {
   width: 100%;
   background-color: white;
   text-align: left;
   border-collapse: collapse;
   color: black;
-  overflow: scroll;
 }
 
-th, td{
+.contenedorTabla {
+  margin-left: 1px;
+  margin-top: 15px;
+  overflow-y: scroll;
+  height: 400px;
+}
+
+th,
+td {
   padding: 20px;
 }
 
-thead{
+thead {
   background-color: #246355;
-  border-bottom: solid 5px;
+  /* border-bottom: solid 5px; */
   color: white;
 }
 
-tr:nth-child(even){
+tr:nth-child(even) {
   background-color: #ddd;
 }
 
-tr:hover td{
+tr:hover td {
   background-color: #369681;
   color: white;
 }
 
-.titulo{
+.titulo {
   animation: glitch 1s linear infinite;
 }
 
-@keyframes glitch{
-  2%,64%{
-    transform: translate(2px,0) skew(0deg);
+@keyframes glitch {
+
+  2%,
+  64% {
+    transform: translate(2px, 0) skew(0deg);
   }
-  4%,60%{
-    transform: translate(-2px,0) skew(0deg);
+4%,
+60% {
+  transform: translate(-2px, 0) skew(0deg);
   }
-  62%{
-    transform: translate(0,0) skew(5deg); 
+62% {
+  transform: translate(0, 0) skew(5deg);
   }
 }
 
 .titulo:before,
-.titulo:after{
+.titulo:after {
   content: attr(title);
   position: absolute;
   left: 0;
 }
 
-.titulo:before{
+.titulo:before {
   animation: glitchTop 1s linear infinite;
   clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
   -webkit-clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
 }
 
-@keyframes glitchTop{
-  2%,64%{
-    transform: translate(2px,-2px);
+@keyframes glitchTop {
+
+  2%,
+  64% {
+    transform: translate(2px, -2px);
   }
-  4%,60%{
-    transform: translate(-2px,2px);
+4%,
+60% {
+  transform: translate(-2px, 2px);
   }
-  62%{
-    transform: translate(13px,-1px) skew(-13deg); 
+62% {
+  transform: translate(13px, -1px) skew(-13deg);
   }
 }
 
-.titulo:after{
+.titulo:after {
   animation: glitchBotom 1.5s linear infinite;
   clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
   -webkit-clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
 }
 
-@keyframes glitchBotom{
-  2%,64%{
-    transform: translate(-2px,0);
+@keyframes glitchBotom {
+
+  2%,
+  64% {
+    transform: translate(-2px, 0);
   }
-  4%,60%{
-    transform: translate(-2px,0);
+4%,
+60% {
+  transform: translate(-2px, 0);
   }
-  62%{
-    transform: translate(-22px,5px) skew(21deg); 
+62% {
+  transform: translate(-22px, 5px) skew(21deg);
   }
 }
 
-.ordenamiento{
+.ordenamiento {
   margin-top: 30px;
 }
 
-label{
+.labelOrd {
   position: relative;
   color: #01cc65;
   font-size: 30px;
@@ -110,7 +124,7 @@ label{
   cursor: pointer;
 }
 
-label::before{
+.labelOrd::before {
   content: "";
   height: 30px;
   width: 30px;
@@ -119,23 +133,61 @@ label::before{
   margin-right: 20px;
 }
 
-input[type="radio"]:checked + label{
-  background-color: #01cc65;
-  color: white;
+.labelOrd input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
 }
 
-input[type="radio"]:checked + label::before{
+.checkmark {
+  position: absolute;
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+}
+
+.labelOrd:hover input~.checkmark {
+  background-color: #01cc65;
+  height: 16px;
+    width: 16px;
+    border: 10px solid #01cc65;
+  }
+  
+  .labelOrd input:checked~.label {
+  color: white;
+  background-color: #01cc65;
+}
+
+.labelOrd input:checked~.checkmark {
   height: 16px;
   width: 16px;
   border: 10px solid white;
   background-color: #01cc65;
 }
 
-.container .box .Modelo{
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.labelOrd input:checked~.checkmark:after {
+  display: block;
+}
+
+.labelOrd .checkmark:after {
+  top: 9px;
+  left: 9px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.container .box .Modelo {
   margin-top: 40%;
 }
 
-.container .box #selecProgramas{
+.container .box #selecProgramas {
   margin-top: 20px;
   width: 250px;
   height: 50px;
@@ -148,7 +200,7 @@ input[type="radio"]:checked + label::before{
   outline: none;
 }
 
-.container .box #selecProgramas:hover{
+.container .box #selecProgramas:hover {
   box-shadow: inset 131px 0 0 0 #f9e506;
   cursor: pointer;
   color: #000;
@@ -156,14 +208,14 @@ input[type="radio"]:checked + label::before{
   width: auto;
 }
 
-.form{
+.form {
   width: 100%;
   position: relative;
   height: 50px;
   margin-top: 50px;
 }
 
-.form input{
+.form input {
   width: 80%;
   height: 80%;
   color: #595f6e;
@@ -171,7 +223,7 @@ input[type="radio"]:checked + label::before{
   border: none;
 }
 
-button{
+button {
   margin-top: 20px;
   width: 150px;
   height: 50px;
@@ -184,31 +236,35 @@ button{
   outline: none;
 }
 
-button:hover{
+button:hover {
   box-shadow: inset 150px 0 0 0 #f9e506;
   cursor: pointer;
   color: #000;
 }
 
-#tamaño{
+#tamaño {
   margin-top: 20px;
 }
 
-.box{
-    background-color: slateblue;
-    padding: 10px;
-    color: #fff;
-    text-align: center;
+.box {
+  background-color: slateblue;
+  padding: 10px;
+  color: #fff;
+  text-align: center;
 }
 
-.container{
-    grid-template-columns: repeat(3, 1fr);
-    display: grid;
-    column-gap: 10px;
-    height: 98vh;
+.container {
+  grid-template-columns: repeat(3, 1fr);
+  display: grid;
+  column-gap: 10px;
+  height: 98vh;
 }
 
-.memoria{
-    background-color: crimson;
-    height: 820px;
+.memoria {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

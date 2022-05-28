@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de memoria</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <link rel="stylesheet" href="main.css">
 </head>
 
@@ -14,12 +15,12 @@
         <div class="box">
             <div class="titulo"> Agregar un programa </div>
             <div class="form">
-                <input type="text" name = "name" autocomplete="off" placeholder="Nombre del programa">
+                <input type="text" name="name" autocomplete="off" placeholder="Nombre del programa">
                 <input type="text" id="tamaño" name="tamaño" placeholder="Tamaño">
                 <button>Nuevo programa</button>
             </div>
             <div class="Modelo">
-            <div class="titulo"> Metodos de gestion de memoria </div>
+                <div class="titulo"> Metodos de gestion de memoria </div>
                 <select name="" id="selecProgramas">
                     <option selected=" " disabled=" "> Selecciona una particion</option>
                     <option value="1">Dinamica con compactacion</option>
@@ -29,37 +30,60 @@
                 </select>
             </div>
             <div class="ordenamiento">
-                <input type="radio" name ="ordenamiento"><label class="labelOrd" checked = "checked">Mejor ajuste</label><br></input>
-                <input type="radio" name ="ordenamiento"><label class="labelOrd">Peor ajuste</label><br></input>
-                <input type="radio" name ="ordenamiento"><label class="labelOrd">Primer ajuste</label></input>
+                <label class="labelOrd">Mejor ajuste
+                    <input type="radio" checked="checked" name="ordenamiento">
+                    <span class="checkmark"></span>
+                </label><br>
+                
+                <label class="labelOrd">Peor ajuste
+                    <input type="radio" name="ordenamiento">
+                    <span class="checkmark"></span>
+                </label><br>
+                
+                
+                <label class="labelOrd">
+                    <input type="radio" name="ordenamiento">
+                    <label>Primer ajuste</label>
+                    <span class="checkmark"></span>
+                </label>
             </div>
             <button>Empezar</button>
         </div>
         <div class="box">
-            <div class = "titulo">Lista de programas</div>
-            <table class="tabla">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Nombre del proceso</th>
-                        <th>Tamaño del proceso</th>
-                        <th>Encender</th>
-                   </tr>
-                </thead>
-            </table>
+            <div class="titulo">Lista de programas</div>
+            
+            <div class="contenedorTabla">
+                <table class="tabla" id="tablaProgramas">
+                    <thead>
+                        <tr>
+                            <th>Programa</th>
+                            <th>Tamaño</th>
+                            <th>Encender</th>
+                            </tr>
+                            </thead>
+                    <tbody id="programas">
+                    </tbody>
+                </table>
+            </div>
+
             <div class="titulo">Lista de programas ejecutados</div>
-            <table class="tabla">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Nombre del proceso</th>
-                        <th>Tamaño del proceso</th>
-                        <th>Apagar</th>
-                    </tr>
-                </thead>
-            </table>
+            <div class="contenedorTabla">
+                <table class="tabla">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Nombre del proceso</th>
+                            <th>Tamaño del proceso</th>
+                            <th>Apagar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ejecucion">
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="box">
+        <div class="box"
+            style="/*! display: flex; *//*! align-items: center; */display: flex;justify-content: center;align-items: center;">
             <canvas height="820" id="memoria">
             </canvas>
             <script src="logica.js">
