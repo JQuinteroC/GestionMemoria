@@ -53,6 +53,12 @@ function llenarProgramas() {
     });
 }
 
+function removeItemFromArr( arr, item ) {
+    return arr.filter( function( e ) {
+        return e.nombre !== item;
+    } );
+};
+
 function llenarEjecutados() {
     document.getElementById("ejecucion").replaceChildren();
     for (let i = 0; i < programasEjecutados.length; i++) {
@@ -65,9 +71,22 @@ function llenarEjecutados() {
         document.getElementById("ejecucion").appendChild(btn);
     };
 
+    console.log(programasEjecutados)
+
+
     $('#tablaEjecutados').on('click', '.btnApagar', function (event) {
         limpiarMemoria();
         dibujarMemoria();
+
+        var $row = $(this).closest("tr"),
+            $tds = $row.find("td");
+
+        programasEjecutados = removeItemFromArr( programasEjecutados,  $tds[1].textContent);
+
+        llenarEjecutados()
+        //event.target.parentNode.parentNode.remove()
+        
+        //programasEjecutados.splice
         // Dibujar memorias
         // var $row = $(this).closest("tr"),
         //     $tds = $row.find("td");
@@ -84,7 +103,6 @@ function limpiarMemoria() {
 }
 
 function dibujarMemoria() {
-    console.log("se ñañañá otro")
     var canvas = document.getElementById("memoria");
     if (canvas.getContext) {
         var ctx = canvas.getContext("2d");
