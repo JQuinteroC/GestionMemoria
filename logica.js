@@ -103,13 +103,6 @@ function llenarEjecutados() {
     });
 }
 
-/*function llenarMetodos(){
-    document.getElementById("metodos").replaceChildren();
-    switch (){
-
-    }
-}*/
-
 function limpiarMemoria() {
     var canvas = document.getElementById("memoria");
     canvas.width = canvas.width;
@@ -177,7 +170,6 @@ function gestionarMemoria(){
                 break;
             case "3":
                 console.log("Particionamiento Estatico Variable");
-                //var table = document.createElement("TABLE");
 
                 document.getElementById("contMetodos").replaceChildren();
                 for (let i = 0; i < particionesVariables.length; i++){
@@ -185,10 +177,8 @@ function gestionarMemoria(){
 
                     var fila = "<li>"+ particionesVariables[i] + " Megabit" + "</li>";
                     var btn = document.createElement("LI");
-                    //table.innerHTML = btn;
                     btn.innerHTML = fila;
                     document.getElementById("contMetodos").appendChild(btn);
-
                 }
                 break;
             case "4":
