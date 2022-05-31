@@ -107,18 +107,20 @@ function pintarMemoria(posicionHex, nombre, tamano) {
     }
 }
 
-function dibujarMemoria() {
+function dibujarMemoria(numParticiones){
     var canvas = document.getElementById("memoria");
     if (canvas.getContext) {
         var ctx = canvas.getContext("2d");
 
-        for (let index = 0; index < 16; index++) {
+        const valor = 816/numParticiones;
+
+        for (let index = 0; index < numParticiones; index++) {
             if (index % 2 == 0) {
                 ctx.fillStyle = 'black';
             } else {
                 ctx.fillStyle = 'orange';
             }
-            ctx.rect(0, index * 51, 300, 51);
+            ctx.rect(0, index * valor, 300, valor);
             ctx.stroke();
         }
     }
@@ -140,15 +142,15 @@ function agregarListener() {
 
         if (gestionMemoria != 0) {
             if (seleccionAjuste == 'primer') {
-                dibujarMemoria();
+                dibujarMemoria(16);
                 pintarMemoria("f00000", "SO1", 1048576);
                 activarBotones(botones);
             } else if (seleccionAjuste == 'peor') {
-                dibujarMemoria();
+                dibujarMemoria(16);
                 pintarMemoria("f00000", "SO1", 1048576);
                 activarBotones(botones);
             } else if (seleccionAjuste == 'mejor') {
-                dibujarMemoria();
+                dibujarMemoria(16);
                 pintarMemoria("f00000", "SO1", 1048576);
                 activarBotones(botones);
             }
@@ -186,7 +188,7 @@ function agregarListener() {
     $('#tablaEjecutados').unbind('click');
     $('#tablaEjecutados').on('click', '.btnApagar', function (event) {
         limpiarMemoria();
-        dibujarMemoria();
+        dibujarMemoria(16);
 
         var $row = $(this).closest("tr"),
             $tds = $row.find("td");
@@ -243,7 +245,7 @@ function agregarListener() {
                 console.log("Particionamiento Estatico Fijo");
                 gestionMemoria = 4;
                 document.getElementById("contMetodos").replaceChildren();
-                const particion = "<input type='text' name='cantidadParticiones' autocomplete='off' placeholder='Numero de particiones'>" + "</input>";
+                const particion = "<input type='text' name='cantidadParticiones' id = 'cantidadParticiones' autocomplete='off' placeholder='Numero de particiones'>" + "</input>";
                 var btn = document.createElement("DIV");
                 btn.innerHTML = particion;
                 document.getElementById("contMetodos").appendChild(btn);
