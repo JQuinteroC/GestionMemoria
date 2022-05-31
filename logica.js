@@ -192,15 +192,23 @@ function agregarListener() {
     //// Selección de metodo de gestión de memoria
     var optMetodo = document.getElementById("selecProgramas");
     optMetodo.addEventListener("click", function () {
-
+        var ordenamiento = document.getElementsByName("ordenamiento");
         switch (optMetodo.value) {
             case "1":
                 console.log("Particionamiento Dinamico Con Compactacion");
                 gestionMemoria = 1;
+                
+                ordenamiento[0].disabled= false;
+                ordenamiento[1].disabled= false;
+                ordenamiento[2].disabled= false;
                 break;
             case "2":
                 console.log("Particionamiento Dinamico Sin Compactacion");
                 gestionMemoria = 2;
+
+                ordenamiento[0].disabled= false;
+                ordenamiento[1].disabled= false;
+                ordenamiento[2].disabled= false;
                 break;
             case "3":
                 console.log("Particionamiento Estatico Variable");
@@ -214,6 +222,11 @@ function agregarListener() {
                     btn.innerHTML = fila;
                     document.getElementById("contMetodos").appendChild(btn);
                 }
+
+                ordenamiento[0].disabled= false;
+                ordenamiento[1].disabled= false;
+                ordenamiento[2].disabled= false;
+
                 break;
             case "4":
                 console.log("Particionamiento Estatico Fijo");
@@ -223,7 +236,10 @@ function agregarListener() {
                 var btn = document.createElement("DIV");
                 btn.innerHTML = particion;
                 document.getElementById("contMetodos").appendChild(btn);
-
+                
+                ordenamiento[0].disabled= true;
+                ordenamiento[1].disabled= true;
+                ordenamiento[2].disabled= true;
                 break;
             default:
                 console.log("No se ha seleccionado");
