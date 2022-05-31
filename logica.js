@@ -20,17 +20,22 @@ var programas = [{
 },
 {
     "nombre": "Sublime Text",
-    "tamano": 524288,
+    "tamano": 1048576 / 2,
 },
 {
     "nombre": "Android Studio",
-    "tamano": 6291456,
+    "tamano": 1048576 * 6,
 },
 ]
 
 var particionesVariables = [4, 3, 3, 2, 2, 1]
 var gestionMemoria = 0;
 var programasEjecutados = []
+
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
 
 function llenarProgramas() {
     document.getElementById("programas").replaceChildren();
@@ -47,7 +52,7 @@ function llenarProgramas() {
 
 function removeItemFromArr(arr, item) {
     return arr.filter(function (e) {
-        return e.nombre !== item;
+        return e.id != item;
     });
 };
 
@@ -69,20 +74,36 @@ function limpiarMemoria() {
     canvas.width = canvas.width;
 }
 
-function pintarMemoria(posicion, nombre) {
+function pintarMemoria(posicionHex, nombre, tamano) {
     var canvas = document.getElementById("memoria");
     if (canvas.getContext) {
         var ctx = canvas.getContext("2d");
+        /// 51px = 1048576 bytes = 1 MiB
+        /// 51*tamaño/1024*1024
+        var posicion = 51 * parseInt(componentToHex(posicionHex), 16) / 1048576;
+        var altura = 51 * tamano / 1048576;
 
-        ctx.fillStyle = 'blue';
+        // Fondo
+        var r = Math.round(Math.random() * 255);
+        var g = Math.round(Math.random() * 255);
+        var b = Math.round(Math.random() * 255);
 
-        ctx.fillRect(0, posicion * 51, 300, 51);
+        ctx.fillStyle = "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+        ctx.fillRect(0, posicion, 300, altura);
 
+        // Texto
         ctx.font = "30px Arial";
         ctx.textAlign = "center";
-        ctx.fillStyle = 'white';
 
-        ctx.fillText(nombre, 150, 51 * (posicion + 1), 300);
+        var o = Math.round(((parseInt(r) * 299) + (parseInt(g) * 587) + (parseInt(b) * 114)) / 1000);
+        if (o > 125) {
+            ctx.fillStyle = 'black';
+        } else {
+            ctx.fillStyle = 'white';
+        }
+
+        ctx.strokeRect(0, posicion, 300, altura);
+        ctx.fillText(nombre, 150, posicion + altura / 1.5, 300);
     }
 }
 
@@ -103,8 +124,8 @@ function dibujarMemoria() {
     }
 }
 
-function activarBotones(botones){
-    for(let i = 0; i < botones.length; i++){
+function activarBotones(botones) {
+    for (let i = 0; i < botones.length; i++) {
         var boton = botones[i]
         boton.disabled = false;
     }
@@ -113,21 +134,20 @@ function activarBotones(botones){
 function agregarListener() {
     //// Empezar el programa 
     var btnEmpezar = document.getElementById("empezar");
-    
-    btnEmpezar.addEventListener("click", function (){
-        var seleccionAjuste = $('input:radio[name=ordenamiento]:checked').val();    
+    btnEmpezar.addEventListener("click", function () {
+        var seleccionAjuste = $('input:radio[name=ordenamiento]:checked').val();
         var botones = document.getElementsByName("btnEncender");
 
-        if(gestionMemoria != 0){
-            if(seleccionAjuste == 'primer'){
+        if (gestionMemoria != 0) {
+            if (seleccionAjuste == 'primer') {
                 dibujarMemoria();
                 pintarMemoria(15, "SO");
                 activarBotones(botones);
-            }else if(seleccionAjuste == 'peor'){
+            } else if (seleccionAjuste == 'peor') {
                 dibujarMemoria();
                 pintarMemoria(15, "SO");
                 activarBotones(botones);
-            }else if(seleccionAjuste == 'mejor'){
+            } else if (seleccionAjuste == 'mejor') {
                 dibujarMemoria();
                 pintarMemoria(15, "SO");
                 activarBotones(botones);
@@ -150,6 +170,7 @@ function agregarListener() {
 
 
     //// Acción para ejecutar programas existentes
+    $('#tablaProgramas').unbind('click');
     $('#tablaProgramas').on('click', '.btnEncender', function (event) {
 
         var $row = $(this).closest("tr"),
@@ -162,6 +183,7 @@ function agregarListener() {
     });
 
     //// Detener prorgamas en ejecución
+    $('#tablaEjecutados').unbind('click');
     $('#tablaEjecutados').on('click', '.btnApagar', function (event) {
         limpiarMemoria();
         dibujarMemoria();
@@ -169,24 +191,13 @@ function agregarListener() {
         var $row = $(this).closest("tr"),
             $tds = $row.find("td");
 
-        programasEjecutados = removeItemFromArr(programasEjecutados, $tds[1].textContent);
+        programasEjecutados = removeItemFromArr(programasEjecutados, $tds[0].textContent);
 
         for (let i = 0; i < programasEjecutados.length; i++) {
             programasEjecutados[i].id = i + 1
         }
 
         llenarEjecutados()
-
-        //event.target.parentNode.parentNode.remove()
-
-        //programasEjecutados.splice
-        // Dibujar memorias
-        // var $row = $(this).closest("tr"),
-        //     $tds = $row.find("td");
-
-        // $.each($tds, function () {
-        //     console.log($(this).text());
-        // });
     });
 
     //// Selección de metodo de gestión de memoria
@@ -236,6 +247,8 @@ function agregarListener() {
 function init() {
     llenarProgramas();
     agregarListener();
+    pintarMemoria("000000", "SO", 1048576);
+    pintarMemoria("f00000", "SO1", 1048576);
 }
 
 init();
