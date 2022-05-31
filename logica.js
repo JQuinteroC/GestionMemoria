@@ -141,15 +141,15 @@ function agregarListener() {
         if (gestionMemoria != 0) {
             if (seleccionAjuste == 'primer') {
                 dibujarMemoria();
-                pintarMemoria(15, "SO");
+                pintarMemoria("f00000", "SO1", 1048576);
                 activarBotones(botones);
             } else if (seleccionAjuste == 'peor') {
                 dibujarMemoria();
-                pintarMemoria(15, "SO");
+                pintarMemoria("f00000", "SO1", 1048576);
                 activarBotones(botones);
             } else if (seleccionAjuste == 'mejor') {
                 dibujarMemoria();
-                pintarMemoria(15, "SO");
+                pintarMemoria("f00000", "SO1", 1048576);
                 activarBotones(botones);
             }
         }
@@ -247,8 +247,7 @@ function agregarListener() {
 function init() {
     llenarProgramas();
     agregarListener();
-    pintarMemoria("000000", "SO", 1048576);
-    pintarMemoria("f00000", "SO1", 1048576);
+    // pintarMemoria("000000", "SO", 1048576);
 }
 
 init();
