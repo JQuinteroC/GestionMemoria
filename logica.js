@@ -115,11 +115,6 @@ function dibujarMemoria(numParticiones){
         const valor = 816/numParticiones;
 
         for (let index = 0; index < numParticiones; index++) {
-            if (index % 2 == 0) {
-                ctx.fillStyle = 'black';
-            } else {
-                ctx.fillStyle = 'orange';
-            }
             ctx.rect(0, index * valor, 300, valor);
             ctx.stroke();
         }
@@ -266,6 +261,7 @@ function init() {
     llenarProgramas();
     agregarListener();
     // pintarMemoria("000000", "SO", 1048576);
+    dibujarMemoria(5);
 }
 
 init();
