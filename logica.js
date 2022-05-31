@@ -29,7 +29,7 @@ var programas = [{
 ]
 
 var particionesVariables = [4, 3, 3, 2, 2, 1]
-
+var gestionMemoria = 0;
 var programasEjecutados = []
 
 function llenarProgramas() {
@@ -37,7 +37,7 @@ function llenarProgramas() {
     for (let i = 0; i < programas.length; i++) {
         const programa = programas[i];
 
-        var fila = "<tr><td>" + programa.nombre + "</td><td>" + programa.tamano + "</td><td><button class='btn btnEncender'" + " value='" + i + "'>Encender</button>" + "</td></tr>";
+        var fila = "<tr><td>" + programa.nombre + "</td><td>" + programa.tamano + "</td><td><button name = 'btnEncender' class='btn btnEncender'" + " value='" + i + "' disabled>Encender</button>" + "</td></tr>";
 
         var btn = document.createElement("TR");
         btn.innerHTML = fila;
@@ -103,7 +103,38 @@ function dibujarMemoria() {
     }
 }
 
+function activarBotones(botones){
+    for(let i = 0; i < botones.length; i++){
+        var boton = botones[i]
+        boton.disabled = false;
+    }
+}
+
 function agregarListener() {
+    //// Empezar el programa 
+    var btnEmpezar = document.getElementById("empezar");
+    
+    btnEmpezar.addEventListener("click", function (){
+        var seleccionAjuste = $('input:radio[name=ordenamiento]:checked').val();    
+        var botones = document.getElementsByName("btnEncender");
+
+        if(gestionMemoria != 0){
+            if(seleccionAjuste == 'primer'){
+                dibujarMemoria();
+                pintarMemoria(15, "SO");
+                activarBotones(botones);
+            }else if(seleccionAjuste == 'peor'){
+                dibujarMemoria();
+                pintarMemoria(15, "SO");
+                activarBotones(botones);
+            }else if(seleccionAjuste == 'mejor'){
+                dibujarMemoria();
+                pintarMemoria(15, "SO");
+                activarBotones(botones);
+            }
+        }
+    })
+
     //// Acción para crear un programa
     var btnNuevoPrograma = document.getElementById("nuevoPrograma");
     btnNuevoPrograma.addEventListener("click", function () {
@@ -165,13 +196,15 @@ function agregarListener() {
         switch (optMetodo.value) {
             case "1":
                 console.log("Particionamiento Dinamico Con Compactacion");
+                gestionMemoria = 1;
                 break;
             case "2":
                 console.log("Particionamiento Dinamico Sin Compactacion");
+                gestionMemoria = 2;
                 break;
             case "3":
                 console.log("Particionamiento Estatico Variable");
-
+                gestionMemoria = 3;
                 document.getElementById("contMetodos").replaceChildren();
                 for (let i = 0; i < particionesVariables.length; i++) {
                     console.log(particionesVariables[i]);
@@ -184,7 +217,7 @@ function agregarListener() {
                 break;
             case "4":
                 console.log("Particionamiento Estatico Fijo");
-
+                gestionMemoria = 4;
                 document.getElementById("contMetodos").replaceChildren();
                 const particion = "<input type='text' name='cantidadParticiones' autocomplete='off' placeholder='Numero de particiones'>" + "</input>";
                 var btn = document.createElement("DIV");
@@ -202,8 +235,6 @@ function agregarListener() {
 
 function init() {
     llenarProgramas();
-    dibujarMemoria();
-    pintarMemoria(15, "SO");
     agregarListener();
 }
 

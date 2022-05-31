@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de memoria</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="clases.js"></script>
     <link rel="stylesheet" href="main.css">
 </head>
 
@@ -35,23 +36,23 @@
             </div>
             <div class="ordenamiento">
                 <label class="labelOrd">Mejor ajuste
-                    <input type="radio" checked="checked" name="ordenamiento">
+                    <input type="radio" checked="checked" name="ordenamiento" value="mejor">
                     <span class="checkmark"></span>
                 </label><br>
                 
                 <label class="labelOrd">Peor ajuste
-                    <input type="radio" name="ordenamiento">
+                    <input type="radio" name="ordenamiento" value="peor">
                     <span class="checkmark"></span>
                 </label><br>
                 
                 
                 <label class="labelOrd">
                     Primer ajuste
-                    <input type="radio" name="ordenamiento">
+                    <input type="radio" name="ordenamiento" value="primer">
                     <span class="checkmark"></span>
                 </label>
             </div>
-            <button>Empezar</button>
+            <button id = "empezar">Empezar</button>
         </div>
         <div class="box">
             <div class="titulo">Lista de programas</div>
