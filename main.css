@@ -115,7 +115,7 @@ tr:hover td {
 }
 
 .ordenamiento {
-  margin-top: 90px;
+  margin-top: 40px;
 }
 
 .labelOrd {
@@ -190,7 +190,7 @@ tr:hover td {
 }
 
 .container .box .Modelo {
-  margin-top: 40%;
+  margin-top: 20px;
 }
 
 .container .box #selecProgramas {
@@ -216,9 +216,7 @@ tr:hover td {
 
 .form {
   width: 100%;
-  position: relative;
-  height: 50px;
-  margin-top: 50px;
+  margin-top: 15px;
 }
 
 .form input {

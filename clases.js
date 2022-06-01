@@ -1,32 +1,53 @@
-class Memoria{
-    constructor(tamaño){
-        this.tamaño = tamaño
+class Memoria {
+    constructor(tamano, procesos) {
+        this.tamano = tamano
+        this.procesos = procesos
     }
 
-    getTamaño(posicion){
-        return this.tamaño[posicion];
+    getTamano() {
+        return this.tamano;
     }
 
-    insertarProceso(proceso,index){
-        this.tamaño[index] = proceso;
+    getProcesos() {
+        return this.procesos;
     }
 
-    eliminarProceso(index){
-        this.tamaño[index] = 0;
+    getProceso(posicion) {
+        if (posicion < this.procesos.length - 1)
+            return this.procesos[posicion];
+        return null;
+    }
+
+    insertarProceso(proceso, index) {
+        this.procesos[index] = new Proceso(proceso);
+    }
+
+    eliminarProceso(index) {
+        this.procesos[index] = 0;
     }
 }
 
-class Proceso{
-    constructor(nombre, tamaño){
+class Proceso {
+    constructor(id, nombre, tamano, posicion) {
+        this.id = id
         this.nombre = nombre
-        this.tamaño = tamaño
+        this.tamano = tamano
+        this.posicion = posicion
     }
 
-    get nombre(){
+    get id() {
+        return this.id;
+    }
+
+    get nombre() {
         return this.nombre;
     }
 
-    get tamaño(){
-        return this.tamaño;
+    get tamano() {
+        return this.tamano;
+    }
+
+    get posicion() {
+        return this.posicion;
     }
 }

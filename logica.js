@@ -31,6 +31,7 @@ var programas = [{
 var particionesVariables = [4, 3, 3, 2, 2, 1]
 var gestionMemoria = 0;
 var programasEjecutados = []
+var memoria = new Memoria();
 
 function componentToHex(c) {
     var hex = c.toString(16);
@@ -107,15 +108,15 @@ function pintarMemoria(posicionHex, nombre, tamano) {
     }
 }
 
-function dibujarMemoria(numParticiones){
+function dibujarMemoria(numParticiones) {
     var canvas = document.getElementById("memoria");
     if (canvas.getContext) {
         var ctx = canvas.getContext("2d");
 
-        const valor = 816/numParticiones;
+        const valor = 765 / numParticiones;
 
         for (let index = 0; index < numParticiones; index++) {
-            ctx.rect(0, index * valor, 300, valor);
+            ctx.rect(0, index * valor + 51, 300, valor);
             ctx.stroke();
         }
     }
@@ -135,20 +136,24 @@ function agregarListener() {
         var seleccionAjuste = $('input:radio[name=ordenamiento]:checked').val();
         var botones = document.getElementsByName("btnEncender");
 
-        if (gestionMemoria != 0) {
+        if (gestionMemoria == 4) {
+            var cantParticion = document.getElementsByName("cantidadParticiones");
+            limpiarMemoria();
+            dibujarMemoria(cantParticion[0].value);
+            memoria = new Memoria(1048576 * 15, new Array(parseInt(cantParticion[0].value)));
+            pintarMemoria("000000", "SO1", 1048576);
+            activarBotones(botones);
+        } else if (gestionMemoria != 0) {
+            limpiarMemoria();
             if (seleccionAjuste == 'primer') {
-                dibujarMemoria(16);
-                pintarMemoria("f00000", "SO1", 1048576);
-                activarBotones(botones);
+                dibujarMemoria(15);
             } else if (seleccionAjuste == 'peor') {
-                dibujarMemoria(16);
-                pintarMemoria("f00000", "SO1", 1048576);
-                activarBotones(botones);
+                dibujarMemoria(15);
             } else if (seleccionAjuste == 'mejor') {
-                dibujarMemoria(16);
-                pintarMemoria("f00000", "SO1", 1048576);
-                activarBotones(botones);
+                dibujarMemoria(15);
             }
+            pintarMemoria("000000", "SO1", 1048576);
+            activarBotones(botones);
         }
     })
 
@@ -170,13 +175,10 @@ function agregarListener() {
     $('#tablaProgramas').unbind('click');
     $('#tablaProgramas').on('click', '.btnEncender', function (event) {
 
-        var $row = $(this).closest("tr"),
-            $tds = $row.find("td");
+        var $row = $(this).closest("tr");
+        var $tds = $row.find("td");
 
-        // confirmar si la memoria alcanza
-        programasEjecutados.push({ "id": programasEjecutados.length + 1, "nombre": $tds[0].textContent, "tamano": $tds[1].textContent });
-
-        llenarEjecutados();
+        ejecutarProceso($tds);
     });
 
     //// Detener prorgamas en ejecución
@@ -205,22 +207,25 @@ function agregarListener() {
             case "1":
                 console.log("Particionamiento Dinamico Con Compactacion");
                 gestionMemoria = 1;
-                
-                ordenamiento[0].disabled= false;
-                ordenamiento[1].disabled= false;
-                ordenamiento[2].disabled= false;
+                $(".ordenamiento").show();
+
+                ordenamiento[0].disabled = false;
+                ordenamiento[1].disabled = false;
+                ordenamiento[2].disabled = false;
                 break;
             case "2":
                 console.log("Particionamiento Dinamico Sin Compactacion");
                 gestionMemoria = 2;
+                $(".ordenamiento").show();
 
-                ordenamiento[0].disabled= false;
-                ordenamiento[1].disabled= false;
-                ordenamiento[2].disabled= false;
+                ordenamiento[0].disabled = false;
+                ordenamiento[1].disabled = false;
+                ordenamiento[2].disabled = false;
                 break;
             case "3":
                 console.log("Particionamiento Estatico Variable");
                 gestionMemoria = 3;
+                $(".ordenamiento").show();
                 document.getElementById("contMetodos").replaceChildren();
                 for (let i = 0; i < particionesVariables.length; i++) {
                     console.log(particionesVariables[i]);
@@ -231,23 +236,26 @@ function agregarListener() {
                     document.getElementById("contMetodos").appendChild(btn);
                 }
 
-                ordenamiento[0].disabled= false;
-                ordenamiento[1].disabled= false;
-                ordenamiento[2].disabled= false;
+                ordenamiento[0].disabled = false;
+                ordenamiento[1].disabled = false;
+                ordenamiento[2].disabled = false;
 
                 break;
             case "4":
                 console.log("Particionamiento Estatico Fijo");
                 gestionMemoria = 4;
+                $(".ordenamiento").hide();
+
                 document.getElementById("contMetodos").replaceChildren();
                 const particion = "<input type='text' name='cantidadParticiones' id = 'cantidadParticiones' autocomplete='off' placeholder='Numero de particiones'>" + "</input>";
                 var btn = document.createElement("DIV");
                 btn.innerHTML = particion;
                 document.getElementById("contMetodos").appendChild(btn);
-                
-                ordenamiento[0].disabled= true;
-                ordenamiento[1].disabled= true;
-                ordenamiento[2].disabled= true;
+
+                ordenamiento[0].disabled = true;
+                ordenamiento[1].disabled = true;
+                ordenamiento[2].disabled = true;
+
                 break;
             default:
                 console.log("No se ha seleccionado");
@@ -257,10 +265,19 @@ function agregarListener() {
     }, false);
 }
 
+function ejecutarProceso(proceso) {
+    if (gestionMemoria == 4) {
+        var memoriaEstica = memoria.getProcesos();
+        console.log(memoriaEstica)
+    }
+
+    programasEjecutados.push({ "id": programasEjecutados.length + 1, "nombre": proceso[0].textContent, "tamano": proceso[1].textContent });
+    llenarEjecutados();
+}
+
 function init() {
     llenarProgramas();
     agregarListener();
-    // pintarMemoria("000000", "SO", 1048576);
     dibujarMemoria(5);
 }
 
