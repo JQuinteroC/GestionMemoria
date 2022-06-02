@@ -135,13 +135,16 @@ function agregarListener() {
     btnEmpezar.addEventListener("click", function () {
         var seleccionAjuste = $('input:radio[name=ordenamiento]:checked').val();
         var botones = document.getElementsByName("btnEncender");
+        memoria = new Memoria(1048576 * 15, null);
 
         if (gestionMemoria == 4) {
             var cantParticion = document.getElementsByName("cantidadParticiones");
             limpiarMemoria();
             dibujarMemoria(cantParticion[0].value);
-            memoria = new Memoria(1048576 * 15, new Array(parseInt(cantParticion[0].value)));
-            pintarMemoria("000000", "SO1", 1048576);
+
+            memoria.setMetodoFija(parseInt(cantParticion[0].value));
+
+            pintarMemoria("000000", "SO", 1048576);
             activarBotones(botones);
         } else if (gestionMemoria != 0) {
             limpiarMemoria();
@@ -152,7 +155,7 @@ function agregarListener() {
             } else if (seleccionAjuste == 'mejor') {
                 dibujarMemoria(15);
             }
-            pintarMemoria("000000", "SO1", 1048576);
+            pintarMemoria("000000", "SO", 1048576);
             activarBotones(botones);
         }
     })
@@ -266,13 +269,29 @@ function agregarListener() {
 }
 
 function ejecutarProceso(proceso) {
-    if (gestionMemoria == 4) {
-        var memoriaEstica = memoria.getProcesos();
-        console.log(memoriaEstica)
+    var resultado = memoria.insertarProceso({ "id": programasEjecutados.length + 1, "nombre": proceso[0].textContent, "tamano": proceso[1].textContent }, gestionMemoria);
+
+    if (resultado == 1) {
+        alert("Memoria insuficiente");
+    }
+
+    if (resultado == 0) {
+        alert("Memoria llena");
     }
 
     programasEjecutados.push({ "id": programasEjecutados.length + 1, "nombre": proceso[0].textContent, "tamano": proceso[1].textContent });
     llenarEjecutados();
+    dibujarProcesos();
+}
+
+function dibujarProcesos() {
+    var memoriaEstatica = memoria.getSegmentos();
+
+    memoriaEstatica.forEach(segmento => {
+        if (segmento.proceso !== null) {
+            pintarMemoria(segmento.posicion, segmento.proceso.nombre, segmento.proceso.tamano);
+        }
+    });
 }
 
 function init() {
