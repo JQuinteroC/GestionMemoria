@@ -23,6 +23,17 @@ class Memoria {
         }
     }
 
+    setMetodoVariable(segmentos){
+        const mega = 1048576;
+        var posicion = 1048576;
+        console.log(segmentos);
+        this.segmentos[0].tamano = mega * segmentos[0];
+        for (let index = 1; index < segmentos.length; index++){
+            posicion = posicion + mega * segmentos[index-1];
+            this.segmentos.push({ "proceso": null, "tamano": mega * segmentos[index], "posicion": componentToHex(posicion)});
+        }
+    }
+
     getTotalMemoria() {
         var count = 0;
         this.segmentos.forEach(segmento => {
@@ -33,6 +44,8 @@ class Memoria {
 
     insertarProceso(proceso, metodo) {
         switch (metodo) {
+            case 3:
+                return this.estaticaFija(proceso);
             case 4:
                 return this.estaticaFija(proceso);
             default:

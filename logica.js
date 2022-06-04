@@ -108,17 +108,29 @@ function pintarMemoria(posicionHex, nombre, tamano) {
     }
 }
 
-function dibujarMemoria(numParticiones) {
+function dibujarMemoria(numParticiones, tipoGestionMemoria) {
+
     var canvas = document.getElementById("memoria");
     if (canvas.getContext) {
+        
         var ctx = canvas.getContext("2d");
+        if (tipoGestionMemoria == 4){
+            var valor = 765 / numParticiones;
 
-        const valor = 765 / numParticiones;
+            for (let index = 0; index < numParticiones; index++) {
+                ctx.rect(0, index * valor + 51, 300, valor);
+                ctx.stroke();
+            }
+        } else if(tipoGestionMemoria == 3){
 
-        for (let index = 0; index < numParticiones; index++) {
-            ctx.rect(0, index * valor + 51, 300, valor);
-            ctx.stroke();
+            var cont = 0;
+            for (let index = 0; index < numParticiones; index++){
+                ctx.rect(0, cont * 51 + 51, 300, 51 * particionesVariables[index]);
+                ctx.stroke();
+                cont = cont + particionesVariables[index];
+            }
         }
+        
     }
 }
 
@@ -137,30 +149,45 @@ function agregarListener() {
         var botones = document.getElementsByName("btnEncender");
         memoria = new Memoria(1048576 * 15, null);
 
-        /*if (gestionMemoria ==3){
-            
-        }*/
+        switch (gestionMemoria){
 
-        if (gestionMemoria == 4) {
-            var cantParticion = document.getElementsByName("cantidadParticiones");
-            limpiarMemoria();
-            dibujarMemoria(cantParticion[0].value);
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                limpiarMemoria();
+                dibujarMemoria(particionesVariables.length, gestionMemoria);
 
-            memoria.setMetodoFija(parseInt(cantParticion[0].value));
+                if (seleccionAjuste == 'primer') {
+                    console.log("Entramos al proceso de primer ajuste");
+                    memoria.setMetodoVariable(particionesVariables);
+                    console.log(memoria);
+                } else if (seleccionAjuste == 'peor') {
+                    console.log("Entramos al proceso de PEOR ajuste");
+                } else if (seleccionAjuste == 'mejor') {
+                    console.log("Entramos al proceso de MEJOR ajuste");
+                }
 
-            pintarMemoria("000000", "SO", 1048576);
-            activarBotones(botones);
-        } else if (gestionMemoria != 0) {
-            limpiarMemoria();
-            if (seleccionAjuste == 'primer') {
-                dibujarMemoria(15);
-            } else if (seleccionAjuste == 'peor') {
-                dibujarMemoria(15);
-            } else if (seleccionAjuste == 'mejor') {
-                dibujarMemoria(15);
-            }
-            pintarMemoria("000000", "SO", 1048576);
-            activarBotones(botones);
+                pintarMemoria("000000", "SO", 1048576);
+                activarBotones(botones);
+                break;
+            case 4:
+                var cantParticion = document.getElementsByName("cantidadParticiones");
+                limpiarMemoria();
+                dibujarMemoria(cantParticion[0].value, gestionMemoria);
+
+                memoria.setMetodoFija(parseInt(cantParticion[0].value));
+                console.log(memoria);
+
+                pintarMemoria("000000", "SO", 1048576);
+                activarBotones(botones);
+                break;
+            default:
+                limpiarMemoria();
+                pintarMemoria("000000", "SO", 1048576);
+                activarBotones(botones);
+
         }
     })
 
@@ -235,7 +262,6 @@ function agregarListener() {
                 $(".ordenamiento").show();
                 document.getElementById("contMetodos").replaceChildren();
                 for (let i = 0; i < particionesVariables.length; i++) {
-                    console.log(particionesVariables[i]);
 
                     var fila = "<li>" + particionesVariables[i] + " Megabit" + "</li>";
                     var btn = document.createElement("LI");
@@ -277,19 +303,17 @@ function ejecutarProceso(proceso) {
 
     if (resultado == 1) {
         alert("Memoria insuficiente");
+        return 0;
     }
 
     if (resultado == 0) {
         alert("Memoria llena");
+        return 0;
     }
 
-    if (resultado != 0 && resultado != 1){
-        programasEjecutados.push({ "id": programasEjecutados.length + 1, "nombre": proceso[0].textContent, "tamano": proceso[1].textContent });
-        llenarEjecutados();
-        dibujarProcesos();
-    }
-
-    
+    programasEjecutados.push({ "id": programasEjecutados.length + 1, "nombre": proceso[0].textContent, "tamano": proceso[1].textContent });
+    llenarEjecutados();
+    dibujarProcesos();
 }
 
 function dibujarProcesos() {
