@@ -42,6 +42,19 @@ class Memoria {
         return count;
     }
 
+    eliminarProceso(id, nombre){
+        for(let index = 0; index < this.segmentos.length; index++){
+            const element = this.segmentos[index];
+
+            if(element.proceso != null){
+
+                if(element.proceso.id == id && element.proceso.nombre == nombre){
+                    this.segmentos[index].proceso = null;
+                }
+            }
+        }
+    }
+
     insertarProceso(proceso, metodo) {
         switch (metodo) {
             case 3:

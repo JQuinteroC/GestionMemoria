@@ -218,19 +218,25 @@ function agregarListener() {
     //// Detener prorgamas en ejecución
     $('#tablaEjecutados').unbind('click');
     $('#tablaEjecutados').on('click', '.btnApagar', function (event) {
+        var cantParticion = document.getElementsByName("cantidadParticiones");
         limpiarMemoria();
-        dibujarMemoria(16);
+        pintarMemoria("000000", "SO", 1048576);
+        dibujarMemoria(cantParticion[0].value,gestionMemoria);
 
         var $row = $(this).closest("tr"),
             $tds = $row.find("td");
 
+        memoria.eliminarProceso($tds[0].textContent, $tds[1].textContent);
+
         programasEjecutados = removeItemFromArr(programasEjecutados, $tds[0].textContent);
 
-        for (let i = 0; i < programasEjecutados.length; i++) {
-            programasEjecutados[i].id = i + 1
-        }
+        //for (let i = 0; i < programasEjecutados.length; i++) {
+        //    programasEjecutados[i].id = i + 1
+        //}
 
-        llenarEjecutados()
+        llenarEjecutados();
+
+        dibujarProcesos();
     });
 
     //// Selección de metodo de gestión de memoria
