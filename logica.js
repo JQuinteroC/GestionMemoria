@@ -137,6 +137,10 @@ function agregarListener() {
         var botones = document.getElementsByName("btnEncender");
         memoria = new Memoria(1048576 * 15, null);
 
+        /*if (gestionMemoria ==3){
+            
+        }*/
+
         if (gestionMemoria == 4) {
             var cantParticion = document.getElementsByName("cantidadParticiones");
             limpiarMemoria();
@@ -279,9 +283,13 @@ function ejecutarProceso(proceso) {
         alert("Memoria llena");
     }
 
-    programasEjecutados.push({ "id": programasEjecutados.length + 1, "nombre": proceso[0].textContent, "tamano": proceso[1].textContent });
-    llenarEjecutados();
-    dibujarProcesos();
+    if (resultado != 0 && resultado != 1){
+        programasEjecutados.push({ "id": programasEjecutados.length + 1, "nombre": proceso[0].textContent, "tamano": proceso[1].textContent });
+        llenarEjecutados();
+        dibujarProcesos();
+    }
+
+    
 }
 
 function dibujarProcesos() {
