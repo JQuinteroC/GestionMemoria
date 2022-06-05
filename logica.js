@@ -63,7 +63,7 @@ function llenarEjecutados() {
     for (let i = 0; i < programasEjecutados.length; i++) {
         const programa = programasEjecutados[i];
 
-        var fila = "<tr><td>" + programa.id + "</td><td>" + programa.nombre + "</td><td>" + programa.tamano + "</td><td>" + programa.posicion + "</td><td><button class='btn btnApagar'" + " value='" + i + "'>Apagar</button>" + "</td></tr>";
+        var fila = "<tr><td>" + programa.id + "</td><td>" + programa.nombre + "</td><td>" + programa.tamano + "</td><td>0x" + programa.posicion + "</td><td><button class='btn btnApagar'" + " value='" + i + "'>Apagar</button>" + "</td></tr>";
 
         var btn = document.createElement("TR");
         btn.innerHTML = fila;
@@ -155,14 +155,36 @@ function agregarListener() {
         switch (gestionMemoria) {
 
             case 1:
+                if (seleccionAjuste != undefined) {
+                    limpiarMemoria();
+                    dibujarMemoria(1, 4);
+
+                    // memoria.setMetodoVariable(particionesVariables);
+
+                    dibujarProceso("000000", "SO", 1048576);
+                    activarBotones(botones);
+                } else {
+                    alert("Debe seleccionar un tipo de ajuste");
+                }
                 break;
             case 2:
+                if (seleccionAjuste != undefined) {
+                    limpiarMemoria();
+                    dibujarMemoria(1, 4);
+
+                    // memoria.setMetodoVariable(particionesVariables);
+
+                    dibujarProceso("000000", "SO", 1048576);
+                    activarBotones(botones);
+                } else {
+                    alert("Debe seleccionar un tipo de ajuste");
+                }
                 break;
             case 3:
                 if (seleccionAjuste != undefined) {
                     limpiarMemoria();
                     dibujarMemoria(particionesVariables.length, gestionMemoria);
-                   
+
                     memoria.setMetodoVariable(particionesVariables);
 
                     dibujarProceso("000000", "SO", 1048576);
@@ -219,8 +241,10 @@ function agregarListener() {
         switch (gestionMemoria) {
 
             case 1:
+                dibujarMemoria(1, 4);
                 break;
             case 2:
+                dibujarMemoria(1, 4);
                 break;
             case 3:
                 dibujarMemoria(particionesVariables.length, gestionMemoria);
@@ -235,19 +259,15 @@ function agregarListener() {
         var $row = $(this).closest("tr"),
             $tds = $row.find("td");
 
-        memoria.eliminarProceso($tds[0].textContent, $tds[1].textContent);
+        memoria.eliminarProceso($tds[0].textContent, $tds[1].textContent, gestionMemoria);
 
         programasEjecutados = removeItemFromArr(programasEjecutados, $tds[0].textContent);
-
-        //for (let i = 0; i < programasEjecutados.length; i++) {
-        //    programasEjecutados[i].id = i + 1
-        //}
 
         llenarEjecutados();
         dibujarProcesos();
     });
 
-    //// Selección de metodo de gestión de memoria
+    //// Selección de método de gestión de memoria
     var optMetodo = document.getElementById("selecProgramas");
     optMetodo.addEventListener("click", function () {
         var ordenamiento = document.getElementsByName("ordenamiento");
@@ -255,6 +275,7 @@ function agregarListener() {
             case "1":
                 console.log("Particionamiento Dinamico Con Compactacion");
                 gestionMemoria = 1;
+                $("#contMetodos").hide();
                 $(".ordenamiento").show();
 
                 ordenamiento[0].disabled = false;
@@ -264,6 +285,7 @@ function agregarListener() {
             case "2":
                 console.log("Particionamiento Dinamico Sin Compactacion");
                 gestionMemoria = 2;
+                $("#contMetodos").hide();
                 $(".ordenamiento").show();
 
                 ordenamiento[0].disabled = false;
@@ -273,6 +295,7 @@ function agregarListener() {
             case "3":
                 console.log("Particionamiento Estatico Variable");
                 gestionMemoria = 3;
+                $("#contMetodos").show();
                 $(".ordenamiento").show();
                 document.getElementById("contMetodos").replaceChildren();
                 for (let i = 0; i < particionesVariables.length; i++) {
@@ -292,6 +315,7 @@ function agregarListener() {
                 console.log("Particionamiento Estatico Fijo");
                 gestionMemoria = 4;
                 $(".ordenamiento").hide();
+                $("#contMetodos").show();
 
                 document.getElementById("contMetodos").replaceChildren();
                 const particion = "<input type='text' name='cantidadParticiones' id = 'cantidadParticiones' autocomplete='off' placeholder='Numero de particiones'>" + "</input>";
@@ -305,7 +329,9 @@ function agregarListener() {
 
                 break;
             default:
-                console.log("No se ha seleccionado");
+                $(".ordenamiento").hide();
+                $("#contMetodos").hide();
+                console.log("No se ha seleccionado el método de gestión de memoria");
                 break;
 
         }
@@ -325,10 +351,10 @@ function ejecutarProceso(proceso) {
         alert("Memoria llena");
         return 0;
     }
-    var proceoGuardado = memoria.getProceso(idProceso + 1);
+    var procesoGuardado = memoria.getProceso(idProceso + 1);
 
     idProceso += 1;
-    programasEjecutados.push({ "id": idProceso, "nombre": proceso[0].textContent, "tamano": proceso[1].textContent, "posicion": proceoGuardado.posicion });
+    programasEjecutados.push({ "id": idProceso, "nombre": proceso[0].textContent, "tamano": proceso[1].textContent, "posicion": procesoGuardado.posicion });
     llenarEjecutados();
     dibujarProcesos();
 }
@@ -346,7 +372,6 @@ function dibujarProcesos() {
 function init() {
     llenarProgramas();
     agregarListener();
-    dibujarMemoria(5);
 }
 
 init();

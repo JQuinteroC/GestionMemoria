@@ -48,7 +48,7 @@ class Memoria {
         return count;
     }
 
-    eliminarProceso(id, nombre) {
+    eliminarProceso(id, nombre, gestionMemoria) {
         for (let index = 0; index < this.segmentos.length; index++) {
             const element = this.segmentos[index];
 
@@ -56,14 +56,28 @@ class Memoria {
 
                 if (element.proceso.id == id && element.proceso.nombre == nombre) {
                     this.segmentos[index].proceso = null;
-                    // return this.segmentos[index].posicion;
                 }
             }
+        }
+
+        switch (gestionMemoria) {
+            case 2:
+                this.dividirMemoria();
+                break;
         }
     }
 
     insertarProceso(proceso, metodo, seleccionAjuste) {
         switch (metodo) {
+            case 2:
+                if (seleccionAjuste == 'primer') {
+                    this.primerAjuste(proceso);
+                } else if (seleccionAjuste == 'peor') {
+                    this.peorAjuste(proceso);
+                } else if (seleccionAjuste == 'mejor') {
+                    this.mejorAjuste(proceso);
+                }
+                return this.dividirMemoria();
             case 3:
                 if (seleccionAjuste == 'primer') {
                     return this.primerAjuste(proceso);
@@ -75,7 +89,7 @@ class Memoria {
             case 4:
                 return this.estaticaFija(proceso);
             default:
-                break;
+                return 0;
         }
     }
 
@@ -131,11 +145,11 @@ class Memoria {
     mejorAjuste(proceso) {
         // return 1 si el proceso no cabe en el segmento
         // return 0 si la memoria esta llena
-        var mejor = 1048576 * 15;  
-        var cabe= false;
+        var mejor = 1048576 * 15;
+        var cabe = false;
         var memoriaLlena = true;
         var segmento = 0;
-        
+
         for (let index = 0; index < this.segmentos.length; index++) {
             const element = this.segmentos[index];
             var dif = element.tamano - proceso.tamano;
@@ -154,7 +168,7 @@ class Memoria {
             return 0;
         }
 
-        if(cabe){
+        if (cabe) {
             this.segmentos[segmento].proceso = proceso;
             return this.segmentos;
         }
@@ -178,6 +192,38 @@ class Memoria {
             }
         }
         return 0;
+    }
+
+    dividirMemoria() {
+        for (let index = 0; index < this.segmentos.length; index++) {
+            const element = this.segmentos[index];
+            if (element.proceso !== null) {
+                if (element.proceso.tamano < element.tamano) {
+                    var nuevoSeg = element.tamano - element.proceso.tamano;
+                    var posicion = parseInt(element.posicion, 16) + parseInt(element.proceso.tamano);
+
+                    element.tamano = parseInt(element.proceso.tamano);
+                    this.segmentos.splice(index + 1, 0, { "proceso": null, "tamano": nuevoSeg, "posicion": componentToHex(posicion) });
+                }
+            }
+        }
+
+        for (let index = 0; index < this.segmentos.length; index++) {
+            const element = this.segmentos[index];
+            if (element.proceso === null) {
+                if (index + 1 < this.segmentos.length) {
+                    if (this.segmentos[index + 1].proceso === null) {
+                        var nuevoSeg = element.tamano + this.segmentos[index + 1].tamano;
+                        var posicion = parseInt(element.posicion, 16);
+
+                        element.tamano = nuevoSeg;
+                        this.segmentos.splice(index + 1, 1);
+                        index -= 1;
+                    }
+                }
+            }
+        }
+        return this.segmentos;
     }
 }
 
