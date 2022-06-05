@@ -239,7 +239,6 @@ function agregarListener() {
     $('#tablaEjecutados').on('click', '.btnApagar', function (event) {
         limpiarMemoria();
         switch (gestionMemoria) {
-
             case 1:
                 dibujarMemoria(1, 4);
                 break;
@@ -262,6 +261,12 @@ function agregarListener() {
         memoria.eliminarProceso($tds[0].textContent, $tds[1].textContent, gestionMemoria);
 
         programasEjecutados = removeItemFromArr(programasEjecutados, $tds[0].textContent);
+
+        for (let index = 0; index < programasEjecutados.length; index++) {
+            const element = programasEjecutados[index];
+            var proceso = memoria.getProceso(element.id);
+            element.posicion = proceso.posicion;
+        }
 
         llenarEjecutados();
         dibujarProcesos();
