@@ -162,15 +162,8 @@ function agregarListener() {
                 if (seleccionAjuste != undefined) {
                     limpiarMemoria();
                     dibujarMemoria(particionesVariables.length, gestionMemoria);
-                    if (seleccionAjuste == 'primer') {
-                        console.log("Entramos al proceso de primer ajuste");
-                        memoria.setMetodoVariable(particionesVariables);
-                        console.log(memoria);
-                    } else if (seleccionAjuste == 'peor') {
-                        console.log("Entramos al proceso de PEOR ajuste");
-                    } else if (seleccionAjuste == 'mejor') {
-                        console.log("Entramos al proceso de MEJOR ajuste");
-                    }
+                   
+                    memoria.setMetodoVariable(particionesVariables);
 
                     dibujarProceso("000000", "SO", 1048576);
                     activarBotones(botones);
@@ -320,7 +313,8 @@ function agregarListener() {
 }
 
 function ejecutarProceso(proceso) {
-    var resultado = memoria.insertarProceso({ "id": idProceso + 1, "nombre": proceso[0].textContent, "tamano": proceso[1].textContent }, gestionMemoria);
+    var seleccionAjuste = $('input:radio[name=ordenamiento]:checked').val();
+    var resultado = memoria.insertarProceso({ "id": idProceso + 1, "nombre": proceso[0].textContent, "tamano": proceso[1].textContent }, gestionMemoria, seleccionAjuste);
 
     if (resultado == 1) {
         alert("Memoria insuficiente");

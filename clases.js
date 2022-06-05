@@ -48,13 +48,13 @@ class Memoria {
         return count;
     }
 
-    eliminarProceso(id, nombre){
-        for(let index = 0; index < this.segmentos.length; index++){
+    eliminarProceso(id, nombre) {
+        for (let index = 0; index < this.segmentos.length; index++) {
             const element = this.segmentos[index];
 
-            if(element.proceso != null){
+            if (element.proceso != null) {
 
-                if(element.proceso.id == id && element.proceso.nombre == nombre){
+                if (element.proceso.id == id && element.proceso.nombre == nombre) {
                     this.segmentos[index].proceso = null;
                     // return this.segmentos[index].posicion;
                 }
@@ -62,10 +62,16 @@ class Memoria {
         }
     }
 
-    insertarProceso(proceso, metodo) {
+    insertarProceso(proceso, metodo, seleccionAjuste) {
         switch (metodo) {
             case 3:
-                return this.primerAjuste(proceso);
+                if (seleccionAjuste == 'primer') {
+                    return this.primerAjuste(proceso);
+                } else if (seleccionAjuste == 'peor') {
+                    return this.peorAjuste(proceso);
+                } else if (seleccionAjuste == 'mejor') {
+                    return this.mejorAjuste(proceso);
+                }
             case 4:
                 return this.estaticaFija(proceso);
             default:
@@ -120,6 +126,41 @@ class Memoria {
         }
 
         return 1;
+    }
+
+    mejorAjuste(proceso) {
+        // return 1 si el proceso no cabe en el segmento
+        // return 0 si la memoria esta llena
+        var mejor = 1048576 * 15;  
+        var cabe= false;
+        var memoriaLlena = true;
+        var segmento = 0;
+        
+        for (let index = 0; index < this.segmentos.length; index++) {
+            const element = this.segmentos[index];
+            var dif = element.tamano - proceso.tamano;
+
+            if (element.proceso === null) {
+                if (dif < mejor && dif >= 0) {
+                    mejor = dif;
+                    segmento = index;
+                    cabe = true;
+                }
+                memoriaLlena = false;
+            }
+        }
+
+        if (memoriaLlena) {
+            return 0;
+        }
+
+        if(cabe){
+            this.segmentos[segmento].proceso = proceso;
+            return this.segmentos;
+        }
+
+        return 1;
+
     }
 
     estaticaFija(proceso) {
