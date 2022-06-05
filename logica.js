@@ -28,10 +28,11 @@ var programas = [{
 },
 ]
 
-var particionesVariables = [4, 3, 3, 2, 2, 1]
+var particionesVariables = [1, 2, 2, 3, 3, 4]
 var gestionMemoria = 0;
 var programasEjecutados = []
 var memoria = new Memoria();
+var idProceso = 0;
 
 function componentToHex(c) {
     var hex = c.toString(16);
@@ -62,7 +63,7 @@ function llenarEjecutados() {
     for (let i = 0; i < programasEjecutados.length; i++) {
         const programa = programasEjecutados[i];
 
-        var fila = "<tr><td>" + programa.id + "</td><td>" + programa.nombre + "</td><td>" + programa.tamano + "</td><td><button class='btn btnApagar'" + " value='" + i + "'>Apagar</button>" + "</td></tr>";
+        var fila = "<tr><td>" + programa.id + "</td><td>" + programa.nombre + "</td><td>" + programa.tamano + "</td><td>" + programa.posicion + "</td><td><button class='btn btnApagar'" + " value='" + i + "'>Apagar</button>" + "</td></tr>";
 
         var btn = document.createElement("TR");
         btn.innerHTML = fila;
@@ -75,7 +76,7 @@ function limpiarMemoria() {
     canvas.width = canvas.width;
 }
 
-function pintarMemoria(posicionHex, nombre, tamano) {
+function dibujarProceso(posicionHex, nombre, tamano) {
     var canvas = document.getElementById("memoria");
     if (canvas.getContext) {
         var ctx = canvas.getContext("2d");
@@ -109,28 +110,27 @@ function pintarMemoria(posicionHex, nombre, tamano) {
 }
 
 function dibujarMemoria(numParticiones, tipoGestionMemoria) {
-
     var canvas = document.getElementById("memoria");
     if (canvas.getContext) {
-        
+
         var ctx = canvas.getContext("2d");
-        if (tipoGestionMemoria == 4){
+        if (tipoGestionMemoria == 4) {
             var valor = 765 / numParticiones;
 
             for (let index = 0; index < numParticiones; index++) {
                 ctx.rect(0, index * valor + 51, 300, valor);
                 ctx.stroke();
             }
-        } else if(tipoGestionMemoria == 3){
-
+        } else if (tipoGestionMemoria == 3) {
             var cont = 0;
-            for (let index = 0; index < numParticiones; index++){
+
+            for (let index = 0; index < numParticiones; index++) {
                 ctx.rect(0, cont * 51 + 51, 300, 51 * particionesVariables[index]);
                 ctx.stroke();
                 cont = cont + particionesVariables[index];
             }
         }
-        
+
     }
 }
 
@@ -148,29 +148,35 @@ function agregarListener() {
         var seleccionAjuste = $('input:radio[name=ordenamiento]:checked').val();
         var botones = document.getElementsByName("btnEncender");
         memoria = new Memoria(1048576 * 15, null);
+        programasEjecutados = [];
+        llenarEjecutados();
+        idProceso = 0;
 
-        switch (gestionMemoria){
+        switch (gestionMemoria) {
 
             case 1:
                 break;
             case 2:
                 break;
             case 3:
-                limpiarMemoria();
-                dibujarMemoria(particionesVariables.length, gestionMemoria);
+                if (seleccionAjuste != undefined) {
+                    limpiarMemoria();
+                    dibujarMemoria(particionesVariables.length, gestionMemoria);
+                    if (seleccionAjuste == 'primer') {
+                        console.log("Entramos al proceso de primer ajuste");
+                        memoria.setMetodoVariable(particionesVariables);
+                        console.log(memoria);
+                    } else if (seleccionAjuste == 'peor') {
+                        console.log("Entramos al proceso de PEOR ajuste");
+                    } else if (seleccionAjuste == 'mejor') {
+                        console.log("Entramos al proceso de MEJOR ajuste");
+                    }
 
-                if (seleccionAjuste == 'primer') {
-                    console.log("Entramos al proceso de primer ajuste");
-                    memoria.setMetodoVariable(particionesVariables);
-                    console.log(memoria);
-                } else if (seleccionAjuste == 'peor') {
-                    console.log("Entramos al proceso de PEOR ajuste");
-                } else if (seleccionAjuste == 'mejor') {
-                    console.log("Entramos al proceso de MEJOR ajuste");
+                    dibujarProceso("000000", "SO", 1048576);
+                    activarBotones(botones);
+                } else {
+                    alert("Debe seleccionar un tipo de ajuste");
                 }
-
-                pintarMemoria("000000", "SO", 1048576);
-                activarBotones(botones);
                 break;
             case 4:
                 var cantParticion = document.getElementsByName("cantidadParticiones");
@@ -178,14 +184,13 @@ function agregarListener() {
                 dibujarMemoria(cantParticion[0].value, gestionMemoria);
 
                 memoria.setMetodoFija(parseInt(cantParticion[0].value));
-                console.log(memoria);
 
-                pintarMemoria("000000", "SO", 1048576);
+                dibujarProceso("000000", "SO", 1048576);
                 activarBotones(botones);
                 break;
             default:
                 limpiarMemoria();
-                pintarMemoria("000000", "SO", 1048576);
+                dibujarProceso("000000", "SO", 1048576);
                 activarBotones(botones);
 
         }
@@ -208,7 +213,6 @@ function agregarListener() {
     //// Acción para ejecutar programas existentes
     $('#tablaProgramas').unbind('click');
     $('#tablaProgramas').on('click', '.btnEncender', function (event) {
-
         var $row = $(this).closest("tr");
         var $tds = $row.find("td");
 
@@ -218,10 +222,22 @@ function agregarListener() {
     //// Detener prorgamas en ejecución
     $('#tablaEjecutados').unbind('click');
     $('#tablaEjecutados').on('click', '.btnApagar', function (event) {
-        var cantParticion = document.getElementsByName("cantidadParticiones");
         limpiarMemoria();
-        pintarMemoria("000000", "SO", 1048576);
-        dibujarMemoria(cantParticion[0].value,gestionMemoria);
+        switch (gestionMemoria) {
+
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                dibujarMemoria(particionesVariables.length, gestionMemoria);
+                break;
+            case 4:
+                var cantParticion = document.getElementsByName("cantidadParticiones");
+                dibujarMemoria(cantParticion[0].value, gestionMemoria);
+                break;
+        }
+        dibujarProceso("000000", "SO", 1048576);
 
         var $row = $(this).closest("tr"),
             $tds = $row.find("td");
@@ -235,7 +251,6 @@ function agregarListener() {
         //}
 
         llenarEjecutados();
-
         dibujarProcesos();
     });
 
@@ -305,7 +320,7 @@ function agregarListener() {
 }
 
 function ejecutarProceso(proceso) {
-    var resultado = memoria.insertarProceso({ "id": programasEjecutados.length + 1, "nombre": proceso[0].textContent, "tamano": proceso[1].textContent }, gestionMemoria);
+    var resultado = memoria.insertarProceso({ "id": idProceso + 1, "nombre": proceso[0].textContent, "tamano": proceso[1].textContent }, gestionMemoria);
 
     if (resultado == 1) {
         alert("Memoria insuficiente");
@@ -316,8 +331,10 @@ function ejecutarProceso(proceso) {
         alert("Memoria llena");
         return 0;
     }
+    var proceoGuardado = memoria.getProceso(idProceso + 1);
 
-    programasEjecutados.push({ "id": programasEjecutados.length + 1, "nombre": proceso[0].textContent, "tamano": proceso[1].textContent });
+    idProceso += 1;
+    programasEjecutados.push({ "id": idProceso, "nombre": proceso[0].textContent, "tamano": proceso[1].textContent, "posicion": proceoGuardado.posicion });
     llenarEjecutados();
     dibujarProcesos();
 }
@@ -327,7 +344,7 @@ function dibujarProcesos() {
 
     memoriaEstatica.forEach(segmento => {
         if (segmento.proceso !== null) {
-            pintarMemoria(segmento.posicion, segmento.proceso.nombre, segmento.proceso.tamano);
+            dibujarProceso(segmento.posicion, "(" + segmento.proceso.id + ")" + segmento.proceso.nombre, segmento.proceso.tamano);
         }
     });
 }

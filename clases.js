@@ -7,9 +7,16 @@ class Memoria {
         return this.segmentos;
     }
 
-    getProceso(index) {
-        if (index < this.segmentos.length - 1)
-            return this.segmentos[index].proceso;
+    getProceso(id) {
+        for (let index = 0; index < this.segmentos.length; index++) {
+            const segmento = this.segmentos[index];
+            if (segmento.proceso != null) {
+                if (segmento.proceso.id == id) {
+                    return segmento;
+                }
+            }
+        }
+
         return null;
     }
 
@@ -23,14 +30,13 @@ class Memoria {
         }
     }
 
-    setMetodoVariable(segmentos){
+    setMetodoVariable(segmentos) {
         const mega = 1048576;
         var posicion = 1048576;
-        console.log(segmentos);
         this.segmentos[0].tamano = mega * segmentos[0];
-        for (let index = 1; index < segmentos.length; index++){
-            posicion = posicion + mega * segmentos[index-1];
-            this.segmentos.push({ "proceso": null, "tamano": mega * segmentos[index], "posicion": componentToHex(posicion)});
+        for (let index = 1; index < segmentos.length; index++) {
+            posicion = posicion + mega * segmentos[index - 1];
+            this.segmentos.push({ "proceso": null, "tamano": mega * segmentos[index], "posicion": componentToHex(posicion) });
         }
     }
 
@@ -50,6 +56,7 @@ class Memoria {
 
                 if(element.proceso.id == id && element.proceso.nombre == nombre){
                     this.segmentos[index].proceso = null;
+                    // return this.segmentos[index].posicion;
                 }
             }
         }
@@ -58,12 +65,61 @@ class Memoria {
     insertarProceso(proceso, metodo) {
         switch (metodo) {
             case 3:
-                return this.estaticaFija(proceso);
+                return this.primerAjuste(proceso);
             case 4:
                 return this.estaticaFija(proceso);
             default:
                 break;
         }
+    }
+
+    primerAjuste(proceso) {
+        // return 1 si el proceso no cabe en el segmento
+        // return 0 si la memoria esta llena
+        var memoriaLlena = true;
+        for (let index = 0; index < this.segmentos.length; index++) {
+            const element = this.segmentos[index];
+
+            if (element.proceso === null) {
+                memoriaLlena = false;
+                if (element.tamano >= proceso.tamano) {
+                    this.segmentos[index].proceso = proceso;
+                    return this.segmentos;
+                }
+            }
+        }
+
+        if (memoriaLlena)
+            return 0;
+
+        return 1;
+    }
+
+    peorAjuste(proceso) {
+        // return 1 si el proceso no cabe en el segmento
+        // return 0 si la memoria esta llena
+        var memoriaLlena = true;
+        var segmento = 0;
+        for (let index = 0; index < this.segmentos.length; index++) {
+            const element = this.segmentos[index];
+            if (element.proceso === null) {
+                if (element.tamano > this.segmentos[segmento].tamano) {
+                    segmento = index;
+                    memoriaLlena = false;
+                }
+            }
+        }
+
+        if (memoriaLlena) {
+            return 0;
+        }
+
+        if (this.segmentos[segmento].tamano >= proceso.tamano) {
+            this.segmentos[segmento].proceso = proceso;
+            return this.segmentos;
+        }
+
+        return 1;
     }
 
     estaticaFija(proceso) {
