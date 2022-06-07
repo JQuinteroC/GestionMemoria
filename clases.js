@@ -129,11 +129,15 @@ class Memoria {
         for (let index = 0; index < this.segmentos.length; index++) {
             const element = this.segmentos[index];
             if (element.proceso === null) {
-                if (element.tamano > this.segmentos[segmento].tamano) {
+                if (element.tamano >= parseInt(proceso.tamano)) {
                     segmento = index;
                 }
                 memoriaLlena = false;
             }
+        }
+
+        if (segmento == 0 && this.segmentos[segmento].proceso != null) {
+            return 1;
         }
 
         if (memoriaLlena) {
