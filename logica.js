@@ -203,6 +203,32 @@ function agregarListener() {
                 dibujarProceso("000000", "SO", 1048576);
                 activarBotones(botones);
                 break;
+            case 5:
+                if (seleccionAjuste != undefined) {
+                    limpiarMemoria();
+                    dibujarMemoria(1, 4);
+
+                    // memoria.setMetodoVariable(particionesVariables);
+
+                    dibujarProceso("000000", "SO", 1048576);
+                    activarBotones(botones);
+                } else {
+                    alert("Debe seleccionar un tipo de ajuste");
+                }
+                break;
+            case 6:
+                if (seleccionAjuste != undefined) {
+                    limpiarMemoria();
+                    dibujarMemoria(1, 4);
+
+                    // memoria.setMetodoVariable(particionesVariables);
+
+                    dibujarProceso("000000", "SO", 1048576);
+                    activarBotones(botones);
+                } else {
+                    alert("Debe seleccionar un tipo de ajuste");
+                }
+                break;
             default:
                 limpiarMemoria();
                 dibujarProceso("000000", "SO", 1048576);
@@ -332,6 +358,36 @@ function agregarListener() {
                 ordenamiento[1].disabled = true;
                 ordenamiento[2].disabled = true;
 
+                break;
+            case "5":
+                console.log("Segmentacion");
+                gestionMemoria = 5;
+                $("#contMetodos").hide();
+                $(".ordenamiento").show();
+
+                ordenamiento[0].disabled = false;
+                ordenamiento[1].disabled = false;
+                ordenamiento[2].disabled = false;
+
+                break;
+            case "6":
+                console.log("Paginacion");
+                gestionMemoria = 6;
+                $("#contMetodos").show();
+                $(".ordenamiento").show();
+
+                document.getElementById("contMetodos").replaceChildren();
+                const  confPagina=  "<div>Tamaño de la pagina</div>"+
+                                    "<input type='text' name='tamanoPagina' id='tamanoPagina' autocomplete='off' placeholder='Tamano en KiB'>" + "</input>"+
+                                    "<div>Fragmentos del marco</div>"+
+                                    "<input type='text' name='numFragmentos' id='numFragmentos' autocomplete='off' placeholder='Numero de fragmentos'>" + "</input>";
+                var btn = document.createElement("DIV");
+                btn.innerHTML = confPagina;
+                document.getElementById("contMetodos").appendChild(btn);
+
+                ordenamiento[0].disabled = false;
+                ordenamiento[1].disabled = false;
+                ordenamiento[2].disabled = false;
                 break;
             default:
                 $(".ordenamiento").hide();
