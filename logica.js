@@ -220,50 +220,15 @@ function agregarListener() {
                 if (seleccionAjuste != undefined) {
                     limpiarMemoria();
                     dibujarMemoria(1, 4);
-                    /*
-                    //Poner la tabla invisible
-                    var tabla = document.getElementById("tablaEjecutados");
-                    var contenedor = document.getElementById("contenedorTabla");
-
-                    tabla.innerHTML = "";
                     
-                    //Creación de la tabla 
-                    let tablaCreada = document.createElement('table');
-                    let thead = document.createElement('thead');
-                    let tbody = document.createElement('tbody');
-
-                    tablaCreada.appendChild(thead);
-                    tablaCreada.appendChild(tbody);
-
-                    document.getElementById('tablasEjec').appendChild(tablaCreada);
-
-                    // Crando y añadiendo la información de la tabla
-                    let row_1 = document.createElement('tr');
-                    let heading_1 = document.createElement('th');
-                    heading_1.innerHTML = "ID";
-                    let heading_2 = document.createElement('th');
-                    heading_2.innerHTML = "Nombre";
-                    let heading_3 = document.createElement('th');
-                    heading_3.innerHTML = "Parte";
-                    let heading_4 = document.createElement('th');
-                    heading_4.innerHTML = "Tamaño";
-                    let heading_5 = document.createElement('th');
-                    heading_4.innerHTML = "?";
-                    let heading_6 = document.createElement('th');
-                    heading_4.innerHTML = "?";
-
-                    row_1.appendChild(heading_1);
-                    row_1.appendChild(heading_2);
-                    row_1.appendChild(heading_3);
-                    row_1.appendChild(heading_4);
-                    row_1.appendChild(heading_5);
-                    row_1.appendChild(heading_6);
-                    thead.appendChild(row_1);
-                    */
                     // memoria.setMetodoVariable(particionesVariables);
 
                     dibujarProceso("000000", "SO", 1048576);
                     activarBotones(botones);
+
+                    document.getElementById("paginacion1").visibility = "visible";
+                    document.getElementById("paginacion2").visibility = "visible"; 
+                    document.getElementById("paginacion3").visibility = "visible";
                 } else {
                     alert("Debe seleccionar un tipo de ajuste");
                 }

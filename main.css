@@ -20,6 +20,10 @@ body {
   height: 400px;
 }
 
+#paginacion1, #paginacion2, #paginacion3 {
+  visibility: hidden;
+}
+
 th,
 td {
   padding: 20px;
