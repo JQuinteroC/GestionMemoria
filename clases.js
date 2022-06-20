@@ -20,10 +20,12 @@ class Memoria {
         return null;
     }
 
-    getTotalMemoria() {
+    getMemoriaDisponible() {
         var count = 0;
         this.segmentos.forEach(segmento => {
-            count += segmento.tamano;
+            if (segmento.proceso == null){
+                count += segmento.tamano;
+            }
         });
         return count;
     }
@@ -72,6 +74,17 @@ class Memoria {
     }
 
     insertarProceso(proceso, metodo, seleccionAjuste) {
+
+        /// Paginacion
+        if (metodo == 6){
+            if (this.getMemoriaDisponible() < proceso.tamaño){
+                return 0;
+            }
+
+            var procesoPaginado = this.paginarProceso(proceso,this.segmentos[0].tamano);
+            return this.paginacion(procesoPaginado);
+        }
+
         /// Metodo estatico fijo
         if (metodo == 4) {
             return this.estaticaFija(proceso);
@@ -202,6 +215,35 @@ class Memoria {
             }
         }
         return 0;
+    }
+
+    paginacion(paginasProceso){
+        // return 1 si el proceso no cabe en el segmento
+        // return 0 si la memoria esta llena
+        
+        for (let index2 = 0;  index2 < paginasProceso.length; index2++){
+            for (let index = 0; index < this.segmentos.length; index++) {
+                const segmento = this.segmentos[index];
+
+                if (segmento.proceso === null) {
+                    this.segmentos[index].proceso = paginasProceso[index2];
+                    break;
+                }
+            }
+        }
+        return this.segmentos;
+
+    }
+
+    paginarProceso(proceso, tamanoPagina){
+        
+        var pagProceso = Math.ceil(proceso.tamano / tamanoPagina);
+        var arrProcesos = [];
+        
+        for (let index = 0; index < pagProceso; index++){
+            arrProcesos.push({"nombre": proceso.nombre + index,"tamano": tamanoPagina});
+        }
+        return arrProcesos;
     }
 
     dividirMemoria() {

@@ -183,7 +183,7 @@ function dibujarMemoria(numParticiones, tipoGestionMemoria) {
     if (canvas.getContext) {
 
         var ctx = canvas.getContext("2d");
-        if (tipoGestionMemoria == 4) {
+        if (tipoGestionMemoria == 4 || tipoGestionMemoria == 6) {
             var valor = 765 / numParticiones;
 
             for (let index = 0; index < numParticiones; index++) {
@@ -291,7 +291,7 @@ function agregarListener() {
 
                     var cantParticiones = (mega * 15)/tamPagina[0].value;
 
-                    dibujarMemoria(cantParticiones, 4);
+                    dibujarMemoria(cantParticiones, gestionMemoria);
                     memoria.setMetodoFija(parseInt(cantParticiones));
 
 
