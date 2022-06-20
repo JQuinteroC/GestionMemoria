@@ -34,7 +34,7 @@ class Memoria {
         this.segmentos[0].tamano = tamSeg;
         for (let index = 0; index < segmentos - 1; index++) {
             posicion = posicion + tamSeg;
-            this.segmentos.push({ "proceso": null, "tamano": tamSeg, "posicion": componentToHex(posicion) });
+            this.segmentos.push({ "proceso": null, "tamano": tamSeg, "posicion": componentToHex(Math.ceil(posicion)) });
         }
     }
 
@@ -44,7 +44,7 @@ class Memoria {
         this.segmentos[0].tamano = mega * segmentos[0];
         for (let index = 1; index < segmentos.length; index++) {
             posicion = posicion + mega * segmentos[index - 1];
-            this.segmentos.push({ "proceso": null, "tamano": mega * segmentos[index], "posicion": componentToHex(posicion) });
+            this.segmentos.push({ "proceso": null, "tamano": mega * segmentos[index], "posicion": componentToHex(Math.ceil(posicion)) });
         }
     }
 
@@ -214,7 +214,7 @@ class Memoria {
                     var posicion = parseInt(element.posicion, 16) + parseInt(element.proceso.tamano);
 
                     element.tamano = parseInt(element.proceso.tamano);
-                    this.segmentos.splice(index + 1, 0, { "proceso": null, "tamano": nuevoSeg, "posicion": componentToHex(posicion) });
+                    this.segmentos.splice(index + 1, 0, { "proceso": null, "tamano": nuevoSeg, "posicion": componentToHex(Math.ceil(posicion)) });
                 }
             }
         }
@@ -259,12 +259,12 @@ class Memoria {
                 const element = this.segmentos[index];
                 posicion += this.segmentos[index - 1].tamano;
 
-                element.posicion = componentToHex(posicion);
+                element.posicion = componentToHex(Math.ceil(posicion));
             }
 
             /// Guardar el espacio de memoria disponible
             posicion += this.segmentos[this.segmentos.length - 1].tamano;
-            this.segmentos.push({ "proceso": null, "tamano": memoriaDisponible, "posicion": componentToHex(posicion) });
+            this.segmentos.push({ "proceso": null, "tamano": memoriaDisponible, "posicion": componentToHex(Math.ceil(posicion)) });
         }
 
         return this.segmentos;
@@ -272,9 +272,12 @@ class Memoria {
 }
 
 class Proceso {
-    constructor(id, nombre, tamano, posicion) {
+    constructor(id, nombre, bss, data, text, tamano, posicion) {
         this.id = id
         this.nombre = nombre
+        this.bss = bss
+        this.data = data
+        this.text = text
         this.tamano = tamano
         this.posicion = posicion
     }

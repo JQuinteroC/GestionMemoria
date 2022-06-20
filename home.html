@@ -14,12 +14,25 @@
 <body>
     <div class="container">
         <div class="box">
-            <div class="titulo"> Agregar un programa </div>
-            <div class="form">
-                <!--<input type="text" name="size" autocomplete="off" placeholder="Tamaño">-->
-                <!--<input type="text" name="name" autocomplete="off" placeholder="Nombre del programa">-->
-                <button id="nuevoPrograma">Nuevo programa</button>
+            <div class="titulo">Lista de programas</div>
+            <div class="contenedorTablaProgramas">
+                <table class="tabla" id="tablaProgramas">
+                    <thead>
+                        <tr>
+                            <th>Programa</th>
+                            <th>.TEXT</th>
+                            <th>.DATA</th>
+                            <th>.BSS</th>
+                            <th>Tamaño</th>
+                            <th>Encender</th>
+                        </tr>
+                    </thead>
+                    <tbody id="programas">
+                    </tbody>
+                </table>
             </div>
+            <button id="nuevoPrograma">Nuevo programa</button>
+
             <div class="Modelo">
                 <div class="titulo"> Métodos de gestión de memoria </div>
                 <select name="" id="selecProgramas">
@@ -36,48 +49,33 @@
                     </div>
                 </div>
             </div>
+
             <div class="ordenamiento">
-            <div class="titulo"> Tipo de ajuste </div>
-            <br>
-            <label class="labelOrd">Mejor ajuste
+                <div class="titulo"> Tipo de ajuste </div>
+                <br>
+                <label class="labelOrd">Mejor ajuste
                     <input type="radio" name="ordenamiento" value="mejor">
                     <span class="checkmark"></span>
                 </label><br>
-                
+
                 <label class="labelOrd">Peor ajuste
                     <input type="radio" name="ordenamiento" value="peor">
                     <span class="checkmark"></span>
                 </label><br>
-                
-                
+
+
                 <label class="labelOrd">
                     Primer ajuste
                     <input type="radio" name="ordenamiento" value="primer">
                     <span class="checkmark"></span>
                 </label>
             </div>
-            <button id = "empezar">Empezar</button>
-
-            <div class="titulo">Lista de programas</div>
-            
-            <div class="contenedorTabla">
-                <table class="tabla" id="tablaProgramas">
-                    <thead>
-                        <tr>
-                            <th>Programa</th>
-                            <th>Tamaño</th>
-                            <th>Encender</th>
-                            </tr>
-                    </thead>
-                    <tbody id="programas">
-                    </tbody>
-                </table>
-            </div>
-
+            <button id="empezar">Empezar</button>
         </div>
-        <div class="box" id = "tablasEjec">
-            <div class="titulo">Lista de programas ejecutados</div>
-            <div class="contenedorTabla">
+
+        <div class="box" id="tablasEjec">
+            <div class="titulo" id="tituloEjecutados">Lista de programas ejecutados</div>
+            <div class="contenedorTablaEjecutados">
                 <table class="tabla" id="tablaEjecutados">
                     <thead>
                         <tr>
@@ -92,9 +90,10 @@
                     </tbody>
                 </table>
             </div>
-            <div class="titulo" id = "paginacion1">Paginacion</div>
-            <div class="contenedorTabla2" id = "paginacion2">
-                <table class="tabla" id="paginacion3">
+
+            <div class="titulo" id="tituloSegmentacion" style="display: none;">Segmentos</div>
+            <div class="contenedorTablaSegmentos" style="display: none;">
+                <table class="tabla" id="tablaSegemetnos">
                     <thead>
                         <tr>
                             <th>Id</th>
@@ -105,13 +104,28 @@
                             <th>Apagar</th>
                         </tr>
                     </thead>
-                    <tbody id="ejecucion">
+                    <tbody id="segmentos">
                     </tbody>
                 </table>
             </div>
-            <div class="titulo" id = "segmentacion1">Marcos</div>
-            <div class="contenedorTabla3" id = "segmentacion2">
-                <table class="tabla" id="segmentacion3">
+
+            <div class="titulo" id="tituloLibres" style="display: none;">Direcciones libres</div>
+            <div class="contenedorTablaLibres" style="display: none;">
+                <table class="tabla" id="tablaLibres">
+                    <thead>
+                        <tr>
+                            <th>Tamaño</th>
+                            <th>Dirección</th>
+                        </tr>
+                    </thead>
+                    <tbody id="libres">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="titulo" id="tituloMarcos" style="display: none;">Marcos</div>
+            <div class="contenedorTablaMarcos" style="display: none;">
+                <table class="tabla" id="tablaMarcos">
                     <thead>
                         <tr>
                             <th>Id marco</th>
@@ -119,33 +133,35 @@
                             <th>Libre</th>
                         </tr>
                     </thead>
-                    <tbody id="ejecucion">
+                    <tbody id="marcos">
                     </tbody>
                 </table>
             </div>
-            <div class="titulo" id = "segmentacion1">TPP</div>
-            <div class="contenedorTabla4" id = "segmentacion2">
-                <table class="tabla" id="segmentacion3">
+
+            <div class="titulo" id="tituloTPP" style="display: none;">TPP</div>
+            <div class="contenedorTablaTPP" style="display: none;">
+                <table class="tabla" id="tablaTPP">
                     <thead>
                         <tr>
                             <th>Id proceso</th>
                             <th>Nombre</th>
                             <th>Pagina</th>
                             <th>Marco</th>
+                            <th>Apagar</th>
                         </tr>
                     </thead>
-                    <tbody id="ejecucion">
+                    <tbody id="tpps">
                     </tbody>
                 </table>
             </div>
         </div>
+
         <div class="box"
             style="/*! display: flex; *//*! align-items: center; */display: flex;justify-content: center;align-items: center;">
             <canvas height="820" id="memoria">
             </canvas>
             <script src="logica.js">
             </script>
-
         </div>
     </div>
 </body>

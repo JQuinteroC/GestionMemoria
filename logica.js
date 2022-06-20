@@ -1,30 +1,37 @@
 var programas = [{
     "nombre": "Word",
     "tamano": 1048576,
+    "bss": 165,
+    "data": 244986,
+    "text": 803425,
 },
 {
     "nombre": "Excel",
     "tamano": 1048576 * 2,
-},
-{
-    "nombre": "Adobe Reader",
-    "tamano": 1048576,
+    "bss": 256,
+    "data": 893772,
+    "text": 1203124,
 },
 {
     "nombre": "NetBeans",
     "tamano": 1048576 * 3,
-},
-{
-    "nombre": "IntelliJ",
-    "tamano": 1048576 * 3,
+    "bss": 460,
+    "data": 1025223,
+    "text": 2120045,
 },
 {
     "nombre": "Sublime Text",
     "tamano": 1048576 / 2,
+    "bss": 80,
+    "data": 238860,
+    "text": 285348,
 },
 {
     "nombre": "Android Studio",
     "tamano": 1048576 * 6,
+    "bss": 1123,
+    "data": 1892119,
+    "text": 4398214,
 },
 ]
 
@@ -44,12 +51,74 @@ function llenarProgramas() {
     for (let i = 0; i < programas.length; i++) {
         const programa = programas[i];
 
-        var fila = "<tr><td>" + programa.nombre + "</td><td>" + programa.tamano + "</td><td><button name = 'btnEncender' class='btn btnEncender'" + " value='" + i + "' disabled>Encender</button>" + "</td></tr>";
+        var fila = "<tr><td>" + programa.nombre + "</td><td>" + programa.text + "</td><td>" + programa.data + "</td><td>" + programa.bss + "</td><td>" + programa.tamano + "</td><td><button name = 'btnEncender' class='btn btnEncender'" + " value='" + i + "' disabled>Encender</button>" + "</td></tr>";
 
         var btn = document.createElement("TR");
         btn.innerHTML = fila;
         document.getElementById("programas").appendChild(btn);
     };
+}
+
+function mostrarTablasSeg(mostrar) {
+    if (mostrar) {
+        $("#tituloEjecutados").hide();
+        $(".contenedorTablaEjecutados").hide();
+
+        $("#tituloSegmentacion").show();
+        $("#tablaSegemetnos").show();
+        $(".contenedorTablaSegmentos").show();
+        $("#tituloLibres").show();
+        $("#tablaLibres").show();
+        $(".contenedorTablaLibres").show();
+
+        $("#tituloMarcos").hide();
+        $("#tablaMarcos").hide();
+        $(".contenedorTablaMarcos").hide();
+        $("#tituloTPP").hide();
+        $("#tablaTPP").hide();
+        $(".contenedorTablaTPP").hide();
+    } else {
+        $("#tituloEjecutados").show();
+        $(".contenedorTablaEjecutados").show();
+
+        $("#tituloSegmentacion").hide();
+        $("#tablaSegemetnos").hide();
+        $(".contenedorTablaSegmentos").hide();
+        $("#tituloLibres").hide();
+        $("#tablaLibres").hide();
+        $(".contenedorTablaLibres").hide();
+    }
+}
+
+function mostrarTablasPag(mostrar) {
+    if (mostrar) {
+        $("#tituloEjecutados").hide();
+        $(".contenedorTablaEjecutados").hide();
+
+        $("#tituloSegmentacion").hide();
+        $("#tablaSegemetnos").hide();
+        $(".contenedorTablaSegmentos").hide();
+        $("#tituloLibres").hide();
+        $("#tablaLibres").hide();
+        $(".contenedorTablaLibres").hide();
+
+        $("#tituloMarcos").show();
+        $("#tablaMarcos").show();
+        $(".contenedorTablaMarcos").show();
+        $("#tituloTPP").show();
+        $("#tablaTPP").show();
+        $(".contenedorTablaTPP").show();
+    } else {
+        $("#tituloEjecutados").show();
+        $(".contenedorTablaEjecutados").show();
+
+        $("#tituloMarcos").hide();
+        $("#tablaMarcos").hide();
+        $(".contenedorTablaMarcos").hide();
+        $("#tituloTPP").hide();
+        $("#tablaTPP").hide();
+        $(".contenedorTablaTPP").hide();
+    }
 }
 
 function removeItemFromArr(arr, item) {
@@ -159,8 +228,6 @@ function agregarListener() {
                     limpiarMemoria();
                     dibujarMemoria(1, 4);
 
-                    // memoria.setMetodoVariable(particionesVariables);
-
                     dibujarProceso("000000", "SO", 1048576);
                     activarBotones(botones);
                 } else {
@@ -171,8 +238,6 @@ function agregarListener() {
                 if (seleccionAjuste != undefined) {
                     limpiarMemoria();
                     dibujarMemoria(1, 4);
-
-                    // memoria.setMetodoVariable(particionesVariables);
 
                     dibujarProceso("000000", "SO", 1048576);
                     activarBotones(botones);
@@ -196,19 +261,21 @@ function agregarListener() {
             case 4:
                 var cantParticion = document.getElementsByName("cantidadParticiones");
                 limpiarMemoria();
-                dibujarMemoria(cantParticion[0].value, gestionMemoria);
+                if (cantParticion[0].value != "") {
+                    dibujarMemoria(cantParticion[0].value, gestionMemoria);
 
-                memoria.setMetodoFija(parseInt(cantParticion[0].value));
+                    memoria.setMetodoFija(parseInt(cantParticion[0].value));
 
-                dibujarProceso("000000", "SO", 1048576);
-                activarBotones(botones);
+                    dibujarProceso("000000", "SO", 1048576);
+                    activarBotones(botones);
+                } else {
+                    alert("Debe ingresar el número de particiones")
+                }
                 break;
             case 5:
                 if (seleccionAjuste != undefined) {
                     limpiarMemoria();
                     dibujarMemoria(1, 4);
-
-                    // memoria.setMetodoVariable(particionesVariables);
 
                     dibujarProceso("000000", "SO", 1048576);
                     activarBotones(botones);
@@ -220,24 +287,20 @@ function agregarListener() {
                 if (seleccionAjuste != undefined) {
                     limpiarMemoria();
                     dibujarMemoria(1, 4);
-                    
-                    // memoria.setMetodoVariable(particionesVariables);
 
                     dibujarProceso("000000", "SO", 1048576);
                     activarBotones(botones);
 
                     document.getElementById("paginacion1").visibility = "visible";
-                    document.getElementById("paginacion2").visibility = "visible"; 
+                    document.getElementById("paginacion2").visibility = "visible";
                     document.getElementById("paginacion3").visibility = "visible";
                 } else {
                     alert("Debe seleccionar un tipo de ajuste");
                 }
                 break;
             default:
+                alert("Debe seleccionar un método de gestión de memoria");
                 limpiarMemoria();
-                dibujarProceso("000000", "SO", 1048576);
-                activarBotones(botones);
-
         }
     })
 
@@ -245,13 +308,18 @@ function agregarListener() {
     var btnNuevoPrograma = document.getElementById("nuevoPrograma");
     btnNuevoPrograma.addEventListener("click", function () {
         var name = prompt("Nombre del programa");
-        var size = prompt("Tamaño del programa");
+        var text = parseInt(prompt("Tamaño del código"));
+        var data = parseInt(prompt("Tamaño de datos inicializados"));
+        var bss = parseInt(prompt("Tamaño de datos sin inicializar"));
 
-        console.log(size);
-        console.log(name);
-
-        if (name != "" && size != "") {
-            programas.push({ "nombre": name, "tamano": size });
+        if (name != "" && !isNaN(text) && !isNaN(data) && !isNaN(bss)) {
+            programas.push({
+                "nombre": name,
+                "text": text,
+                "data": data,
+                "bss": bss,
+                "tamano": data + text + bss,
+            });
             llenarProgramas();
         } else {
             alert("Error en el llenado del formulario");
@@ -316,6 +384,8 @@ function agregarListener() {
                 gestionMemoria = 1;
                 $("#contMetodos").hide();
                 $(".ordenamiento").show();
+                mostrarTablasPag(false);
+                mostrarTablasSeg(false);
 
                 ordenamiento[0].disabled = false;
                 ordenamiento[1].disabled = false;
@@ -326,6 +396,8 @@ function agregarListener() {
                 gestionMemoria = 2;
                 $("#contMetodos").hide();
                 $(".ordenamiento").show();
+                mostrarTablasPag(false);
+                mostrarTablasSeg(false);
 
                 ordenamiento[0].disabled = false;
                 ordenamiento[1].disabled = false;
@@ -336,6 +408,9 @@ function agregarListener() {
                 gestionMemoria = 3;
                 $("#contMetodos").show();
                 $(".ordenamiento").show();
+                mostrarTablasPag(false);
+                mostrarTablasSeg(false);
+
                 document.getElementById("contMetodos").replaceChildren();
                 for (let i = 0; i < particionesVariables.length; i++) {
 
@@ -355,9 +430,11 @@ function agregarListener() {
                 gestionMemoria = 4;
                 $(".ordenamiento").hide();
                 $("#contMetodos").show();
+                mostrarTablasPag(false);
+                mostrarTablasSeg(false);
 
                 document.getElementById("contMetodos").replaceChildren();
-                const particion = "<input type='text' name='cantidadParticiones' id = 'cantidadParticiones' autocomplete='off' placeholder='Numero de particiones'>" + "</input>";
+                const particion = "<input type='text' name='cantidadParticiones' id = 'cantidadParticiones' autocomplete='off' placeholder='Número de particiones'>" + "</input>";
                 var btn = document.createElement("DIV");
                 btn.innerHTML = particion;
                 document.getElementById("contMetodos").appendChild(btn);
@@ -372,6 +449,8 @@ function agregarListener() {
                 gestionMemoria = 5;
                 $("#contMetodos").hide();
                 $(".ordenamiento").show();
+                mostrarTablasPag(false);
+                mostrarTablasSeg(true);
 
                 ordenamiento[0].disabled = false;
                 ordenamiento[1].disabled = false;
@@ -383,12 +462,14 @@ function agregarListener() {
                 gestionMemoria = 6;
                 $("#contMetodos").show();
                 $(".ordenamiento").show();
+                mostrarTablasSeg(false);
+                mostrarTablasPag(true);
 
                 document.getElementById("contMetodos").replaceChildren();
-                const  confPagina=  "<div>Tamaño de la pagina</div>"+
-                                    "<input type='text' name='tamanoPagina' id='tamanoPagina' autocomplete='off' placeholder='Tamano en KiB'>" + "</input>"+
-                                    "<div>Fragmentos del marco</div>"+
-                                    "<input type='text' name='numFragmentos' id='numFragmentos' autocomplete='off' placeholder='Numero de fragmentos'>" + "</input>";
+                const confPagina = "<div>Tamaño de la pagina</div>" +
+                    "<input type='text' name='tamanoPagina' id='tamanoPagina' autocomplete='off' placeholder='Tamano en KiB'>" + "</input>" +
+                    "<div>Fragmentos del marco</div>" +
+                    "<input type='text' name='numFragmentos' id='numFragmentos' autocomplete='off' placeholder='Número de fragmentos'>" + "</input>";
                 var btn = document.createElement("DIV");
                 btn.innerHTML = confPagina;
                 document.getElementById("contMetodos").appendChild(btn);
@@ -409,7 +490,7 @@ function agregarListener() {
 
 function ejecutarProceso(proceso) {
     var seleccionAjuste = $('input:radio[name=ordenamiento]:checked').val();
-    var resultado = memoria.insertarProceso({ "id": idProceso + 1, "nombre": proceso[0].textContent, "tamano": proceso[1].textContent }, gestionMemoria, seleccionAjuste);
+    var resultado = memoria.insertarProceso({ "id": idProceso + 1, "nombre": proceso[0].textContent, "tamano": proceso[4].textContent }, gestionMemoria, seleccionAjuste);
 
     if (resultado == 1) {
         alert("Memoria insuficiente");
@@ -423,7 +504,7 @@ function ejecutarProceso(proceso) {
     var procesoGuardado = memoria.getProceso(idProceso + 1);
 
     idProceso += 1;
-    programasEjecutados.push({ "id": idProceso, "nombre": proceso[0].textContent, "tamano": proceso[1].textContent, "posicion": procesoGuardado.posicion });
+    programasEjecutados.push({ "id": idProceso, "nombre": proceso[0].textContent, "tamano": proceso[4].textContent, "posicion": procesoGuardado.posicion });
     llenarEjecutados();
     dibujarProcesos();
 }
