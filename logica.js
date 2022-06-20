@@ -467,9 +467,7 @@ function agregarListener() {
 
                 document.getElementById("contMetodos").replaceChildren();
                 const confPagina = "<div>Tamaño de la pagina</div>" +
-                    "<input type='text' name='tamanoPagina' id='tamanoPagina' autocomplete='off' placeholder='Tamano en KiB'>" + "</input>" +
-                    "<div>Fragmentos del marco</div>" +
-                    "<input type='text' name='numFragmentos' id='numFragmentos' autocomplete='off' placeholder='Número de fragmentos'>" + "</input>";
+                    "<input type='text' name='tamanoPagina' id='tamanoPagina' autocomplete='off' placeholder='Tamano en KiB'>" + "</input>";
                 var btn = document.createElement("DIV");
                 btn.innerHTML = confPagina;
                 document.getElementById("contMetodos").appendChild(btn);
