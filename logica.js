@@ -285,16 +285,22 @@ function agregarListener() {
                 break;
             case 6:
                 var tamPagina = document.getElementsByName("tamanoPagina");
+                const mega = 1048576; 
                 if (tamPagina[0].value != "") {
                     limpiarMemoria();
-                    dibujarMemoria(1, 4);
+
+                    var cantParticiones = (mega * 15)/tamPagina[0].value;
+
+                    dibujarMemoria(cantParticiones, 4);
+                    memoria.setMetodoFija(parseInt(cantParticiones));
+
 
                     dibujarProceso("000000", "SO", 1048576);
                     activarBotones(botones);
 
-                    document.getElementById("paginacion1").visibility = "visible";
-                    document.getElementById("paginacion2").visibility = "visible";
-                    document.getElementById("paginacion3").visibility = "visible";
+                    //document.getElementById("paginacion1").visibility = "visible";
+                    //document.getElementById("paginacion2").visibility = "visible";
+                    //document.getElementById("paginacion3").visibility = "visible";
                 } else {
                     alert("Debe llenar el tamaño de la pagina");
                 }
