@@ -140,6 +140,26 @@ function llenarEjecutados() {
     };
 }
 
+function llenarMarcos(){
+    document.getElementById("marcos").replaceChildren();
+    
+    var segmentos = memoria.getSegmentos();
+    for (let i = 0; i < segmentos.length; i++) {
+        
+        var libre = 1;
+        if (segmentos[i].proceso == null){
+            libre = 0;
+        }
+
+        const idHex = componentToHex(i);
+        var fila = "<tr><td>" + idHex + "</td><td>0x" + idHex + segmentos[i].posicion + "</td><td>" + libre + "</td></tr>";
+
+        var btn = document.createElement("TR");
+        btn.innerHTML = fila;
+        document.getElementById("marcos").appendChild(btn);
+    };
+}
+
 function limpiarMemoria() {
     var canvas = document.getElementById("memoria");
     canvas.width = canvas.width;
@@ -374,7 +394,7 @@ function agregarListener() {
         for (let index = 0; index < programasEjecutados.length; index++) {
             const element = programasEjecutados[index];
             var proceso = memoria.getProceso(element.id);
-            element.posicion = proceso.posicion;
+            element.posicion = proceso[0].posicion;
         }
 
         llenarEjecutados();
@@ -506,11 +526,25 @@ function ejecutarProceso(proceso) {
         alert("Memoria llena");
         return 0;
     }
-    var procesoGuardado = memoria.getProceso(idProceso + 1);
 
-    idProceso += 1;
-    programasEjecutados.push({ "id": idProceso, "nombre": proceso[0].textContent, "tamano": proceso[4].textContent, "posicion": procesoGuardado.posicion });
-    llenarEjecutados();
+    if (gestionMemoria != 5 && gestionMemoria != 6){
+        var procesoGuardado = memoria.getProceso(idProceso + 1);
+
+        idProceso += 1;
+        programasEjecutados.push({ "id": idProceso, "nombre": proceso[0].textContent, "tamano": proceso[4].textContent, "posicion": procesoGuardado[0].posicion });
+        llenarEjecutados();
+    }
+
+    if (gestionMemoria == 6){
+        var procesoGuardado = memoria.getProceso(idProceso + 1);
+
+        idProceso += 1;
+        llenarMarcos();
+
+        
+
+    }
+    
     dibujarProcesos();
 }
 

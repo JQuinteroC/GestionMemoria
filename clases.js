@@ -8,16 +8,17 @@ class Memoria {
     }
 
     getProceso(id) {
+        var proceso = [];
+
         for (let index = 0; index < this.segmentos.length; index++) {
             const segmento = this.segmentos[index];
             if (segmento.proceso != null) {
                 if (segmento.proceso.id == id) {
-                    return segmento;
+                    proceso.push(segmento);
                 }
             }
         }
-
-        return null;
+        return proceso;
     }
 
     getMemoriaDisponible() {
@@ -77,8 +78,11 @@ class Memoria {
 
         /// Paginacion
         if (metodo == 6){
-            if (this.getMemoriaDisponible() < proceso.tamaño){
+            if (this.getMemoriaDisponible() == 0){
                 return 0;
+            }
+            if (this.getMemoriaDisponible() < proceso.tamano){
+                return 1;
             }
 
             var procesoPaginado = this.paginarProceso(proceso,this.segmentos[0].tamano);
@@ -218,8 +222,6 @@ class Memoria {
     }
 
     paginacion(paginasProceso){
-        // return 1 si el proceso no cabe en el segmento
-        // return 0 si la memoria esta llena
         
         for (let index2 = 0;  index2 < paginasProceso.length; index2++){
             for (let index = 0; index < this.segmentos.length; index++) {
@@ -241,7 +243,7 @@ class Memoria {
         var arrProcesos = [];
         
         for (let index = 0; index < pagProceso; index++){
-            arrProcesos.push({"nombre": proceso.nombre + index,"tamano": tamanoPagina});
+            arrProcesos.push({"id": proceso.id, "nombre": proceso.nombre + index,"tamano": tamanoPagina});
         }
         return arrProcesos;
     }
