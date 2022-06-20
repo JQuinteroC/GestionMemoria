@@ -461,7 +461,7 @@ function agregarListener() {
                 console.log("Paginacion");
                 gestionMemoria = 6;
                 $("#contMetodos").show();
-                $(".ordenamiento").show();
+                $(".ordenamiento").hide();
                 mostrarTablasSeg(false);
                 mostrarTablasPag(true);
 
@@ -472,9 +472,9 @@ function agregarListener() {
                 btn.innerHTML = confPagina;
                 document.getElementById("contMetodos").appendChild(btn);
 
-                ordenamiento[0].disabled = false;
-                ordenamiento[1].disabled = false;
-                ordenamiento[2].disabled = false;
+                ordenamiento[0].disabled = true;
+                ordenamiento[1].disabled = true;
+                ordenamiento[2].disabled = true;
                 break;
             default:
                 $(".ordenamiento").hide();
