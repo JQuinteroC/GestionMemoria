@@ -284,7 +284,8 @@ function agregarListener() {
                 }
                 break;
             case 6:
-                if (seleccionAjuste != undefined) {
+                var tamPagina = document.getElementsByName("tamanoPagina");
+                if (tamPagina[0].value != "") {
                     limpiarMemoria();
                     dibujarMemoria(1, 4);
 
@@ -295,7 +296,7 @@ function agregarListener() {
                     document.getElementById("paginacion2").visibility = "visible";
                     document.getElementById("paginacion3").visibility = "visible";
                 } else {
-                    alert("Debe seleccionar un tipo de ajuste");
+                    alert("Debe llenar el tamaño de la pagina");
                 }
                 break;
             default:
