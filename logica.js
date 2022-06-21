@@ -587,15 +587,10 @@ function ejecutarProceso(proceso) {
         idProceso += 1;
         llenarMarcos();
 
-<<<<<<< HEAD
         for(let index = 0; index < procesoGuardado.length; index++ ){
             programasTTP.push({"id": procesoGuardado[index].proceso.id, "nombre": procesoGuardado[index].proceso.nombre, "pagina": index});
         }
         llenarTpps();
-=======
-
-
->>>>>>> 9951bf88f4941053044da622ef3dbeff4fbce047
     }
 
     dibujarProcesos();
