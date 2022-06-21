@@ -191,6 +191,8 @@ function llenarSegmentos() {
         btn.innerHTML = fila;
         document.getElementById("segmentos").appendChild(btn);
     };
+}
+
 function llenarTpps(){
     document.getElementById("tpps").replaceChildren();
 
