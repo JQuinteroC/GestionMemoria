@@ -41,6 +41,7 @@ var programasEjecutados = [];
 var programasTTP = [];
 var memoria = new Memoria();
 var idProceso = 0;
+var colores = [];
 
 function componentToHex(c) {
     var hex = c.toString(16);
@@ -141,14 +142,14 @@ function llenarEjecutados() {
     };
 }
 
-function llenarMarcos(){
+function llenarMarcos() {
     document.getElementById("marcos").replaceChildren();
-    
+
     var segmentos = memoria.getSegmentos();
     for (let i = 0; i < segmentos.length; i++) {
-        
+
         var libre = 1;
-        if (segmentos[i].proceso == null){
+        if (segmentos[i].proceso == null) {
             libre = 0;
         }
 
@@ -194,7 +195,7 @@ function limpiarMemoria() {
     canvas.width = canvas.width;
 }
 
-function dibujarProceso(posicionHex, nombre, tamano) {
+function dibujarProceso(posicionHex, nombre, tamano, id) {
     var canvas = document.getElementById("memoria");
     if (canvas.getContext) {
         var ctx = canvas.getContext("2d");
@@ -204,9 +205,24 @@ function dibujarProceso(posicionHex, nombre, tamano) {
         var altura = 51 * tamano / 1048576;
 
         // Fondo
-        var r = Math.round(Math.random() * 255);
-        var g = Math.round(Math.random() * 255);
-        var b = Math.round(Math.random() * 255);
+        var colorId = null;
+        for (let index = 0; index < this.colores.length; index++) {
+            const element = this.colores[index];
+            if (element.id == id) {
+                colorId = index
+            }
+        }
+
+        if (colorId != null) {
+            var r = this.colores[colorId].r;
+            var g = this.colores[colorId].g;
+            var b = this.colores[colorId].b;
+        } else {
+            var r = Math.round(Math.random() * 255);
+            var g = Math.round(Math.random() * 255);
+            var b = Math.round(Math.random() * 255);
+            this.colores.push({ "id": id, "r": r, "g": g, "b": b });
+        }
 
         ctx.fillStyle = "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
         ctx.fillRect(0, posicion, 300, altura);
@@ -334,11 +350,11 @@ function agregarListener() {
                 break;
             case 6:
                 var tamPagina = document.getElementsByName("tamanoPagina");
-                const mega = 1048576; 
+                const mega = 1048576;
                 if (tamPagina[0].value != "") {
                     limpiarMemoria();
 
-                    var cantParticiones = (mega * 15)/tamPagina[0].value;
+                    var cantParticiones = (mega * 15) / tamPagina[0].value;
 
                     dibujarMemoria(cantParticiones, gestionMemoria);
                     memoria.setMetodoFija(parseInt(cantParticiones));
@@ -358,6 +374,7 @@ function agregarListener() {
                 alert("Debe seleccionar un método de gestión de memoria");
                 limpiarMemoria();
         }
+        this.colores = [];
     })
 
     //// Acción para crear un programa
@@ -556,7 +573,7 @@ function ejecutarProceso(proceso) {
         return 0;
     }
 
-    if (gestionMemoria != 5 && gestionMemoria != 6){
+    if (gestionMemoria != 5 && gestionMemoria != 6) {
         var procesoGuardado = memoria.getProceso(idProceso + 1);
 
         idProceso += 1;
@@ -564,18 +581,23 @@ function ejecutarProceso(proceso) {
         llenarEjecutados();
     }
 
-    if (gestionMemoria == 6){
+    if (gestionMemoria == 6) {
         var procesoGuardado = memoria.getProceso(idProceso + 1);
 
         idProceso += 1;
         llenarMarcos();
 
+<<<<<<< HEAD
         for(let index = 0; index < procesoGuardado.length; index++ ){
             programasTTP.push({"id": procesoGuardado[index].proceso.id, "nombre": procesoGuardado[index].proceso.nombre, "pagina": index});
         }
         llenarTpps();
+=======
+
+
+>>>>>>> 9951bf88f4941053044da622ef3dbeff4fbce047
     }
-    
+
     dibujarProcesos();
 }
 
@@ -584,7 +606,7 @@ function dibujarProcesos() {
 
     memoriaEstatica.forEach(segmento => {
         if (segmento.proceso !== null) {
-            dibujarProceso(segmento.posicion, "(" + segmento.proceso.id + ")" + segmento.proceso.nombre, segmento.proceso.tamano);
+            dibujarProceso(segmento.posicion, "(" + segmento.proceso.id + ")" + segmento.proceso.nombre, segmento.proceso.tamano, segmento.proceso.id);
         }
     });
 }
