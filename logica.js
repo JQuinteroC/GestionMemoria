@@ -37,7 +37,8 @@ var programas = [{
 
 var particionesVariables = [1, 2, 2, 3, 3, 4]
 var gestionMemoria = 0;
-var programasEjecutados = []
+var programasEjecutados = [];
+var segmentosEjecutados = [];
 var memoria = new Memoria();
 var idProceso = 0;
 var colores = [];
@@ -161,6 +162,36 @@ function llenarMarcos() {
     };
 }
 
+function llenarLibres() {
+    document.getElementById("libres").replaceChildren();
+
+    var segmentos = memoria.getSegmentosLibres();
+    for (let i = 0; i < segmentos.length; i++) {
+        var fila = "<tr><td>" + segmentos[i].tamano + "</td><td>0x" +  segmentos[i].posicion + "</td></tr>";
+
+        var btn = document.createElement("TR");
+        btn.innerHTML = fila;
+        document.getElementById("libres").appendChild(btn);
+    };
+}
+
+function llenarSegmentos() {
+    document.getElementById("segmentos").replaceChildren();
+
+
+    document.getElementById("ejecucion").replaceChildren();
+    console.log(segmentosEjecutados)
+    for (let i = 0; i < segmentosEjecutados.length; i++) {
+        const programa = segmentosEjecutados[i];
+
+        var fila = "<tr><td>" + programa.id + "</td><td>" + programa.nombre +  "</td><td>" + programa.parte + "</td><td>" +programa.tamano + "</td><td>0x" + programa.posicion + "</td><td><button class='btn btnApagar'" + " value='" + i + "'>Apagar</button>" + "</td></tr>";
+
+        var btn = document.createElement("TR");
+        btn.innerHTML = fila;
+        document.getElementById("segmentos").appendChild(btn);
+    };
+}
+
 function limpiarMemoria() {
     var canvas = document.getElementById("memoria");
     canvas.width = canvas.width;
@@ -199,7 +230,7 @@ function dibujarProceso(posicionHex, nombre, tamano, id) {
         ctx.fillRect(0, posicion, 300, altura);
 
         // Texto
-        ctx.font = "30px Arial";
+        ctx.font = "20px Arial";
         ctx.textAlign = "center";
 
         var o = Math.round(((parseInt(r) * 299) + (parseInt(g) * 587) + (parseInt(b) * 114)) / 1000);
@@ -330,13 +361,8 @@ function agregarListener() {
                     dibujarMemoria(cantParticiones, gestionMemoria);
                     memoria.setMetodoFija(parseInt(cantParticiones));
 
-
                     dibujarProceso("000000", "SO", 1048576);
                     activarBotones(botones);
-
-                    //document.getElementById("paginacion1").visibility = "visible";
-                    //document.getElementById("paginacion2").visibility = "visible";
-                    //document.getElementById("paginacion3").visibility = "visible";
                 } else {
                     alert("Debe llenar el tamaño de la pagina");
                 }
@@ -532,7 +558,13 @@ function agregarListener() {
 
 function ejecutarProceso(proceso) {
     var seleccionAjuste = $('input:radio[name=ordenamiento]:checked').val();
-    var resultado = memoria.insertarProceso({ "id": idProceso + 1, "nombre": proceso[0].textContent, "tamano": proceso[4].textContent }, gestionMemoria, seleccionAjuste);
+
+    var resultado = memoria.insertarProceso({
+        "id": idProceso + 1, "bss": proceso[3].textContent,
+        "data": proceso[2].textContent,
+        "text": proceso[1].textContent,
+        "nombre": proceso[0].textContent, "tamano": proceso[4].textContent
+    }, gestionMemoria, seleccionAjuste);
 
     if (resultado == 1) {
         alert("Memoria insuficiente");
@@ -548,18 +580,29 @@ function ejecutarProceso(proceso) {
         var procesoGuardado = memoria.getProceso(idProceso + 1);
 
         idProceso += 1;
-        programasEjecutados.push({ "id": idProceso, "nombre": proceso[0].textContent, "tamano": proceso[4].textContent, "posicion": procesoGuardado[0].posicion });
+        programasEjecutados.push({
+            "id": idProceso, "nombre": proceso[0].textContent, "tamano": proceso[4].textContent, "posicion": procesoGuardado[0].posicion
+        });
         llenarEjecutados();
+    }
+
+    if (gestionMemoria == 5) {
+        var procesoGuardado = memoria.getProceso(idProceso + 1);
+
+        idProceso += 1;
+        procesoGuardado.forEach(procesog => {
+            console.log(procesog)
+            var parte = procesog.proceso.nombre.split(" - ")
+            segmentosEjecutados.push({"id": idProceso, "nombre": proceso[0].textContent, "parte": parte[1], "tamano": procesog.tamano, "posicion": procesog.posicion});
+        });
+        llenarSegmentos();
+        llenarLibres();
     }
 
     if (gestionMemoria == 6) {
         var procesoGuardado = memoria.getProceso(idProceso + 1);
-
         idProceso += 1;
         llenarMarcos();
-
-
-
     }
 
     dibujarProcesos();

@@ -24,11 +24,23 @@ class Memoria {
     getMemoriaDisponible() {
         var count = 0;
         this.segmentos.forEach(segmento => {
-            if (segmento.proceso == null){
+            if (segmento.proceso == null) {
                 count += segmento.tamano;
             }
         });
         return count;
+    }
+
+    getSegmentosLibres() {
+        var segmentosLibres = [];
+
+        this.segmentos.forEach(segmento => {
+            if (segmento.proceso == null) {
+                segmentosLibres.push(segmento);
+            }
+        });
+
+        return segmentosLibres;
     }
 
     setMetodoFija(segmentos) {
@@ -75,18 +87,29 @@ class Memoria {
     }
 
     insertarProceso(proceso, metodo, seleccionAjuste) {
-
         /// Paginacion
-        if (metodo == 6){
-            if (this.getMemoriaDisponible() == 0){
+        if (metodo == 6) {
+            if (this.getMemoriaDisponible() == 0) {
                 return 0;
             }
-            if (this.getMemoriaDisponible() < proceso.tamano){
+            if (this.getMemoriaDisponible() < proceso.tamano) {
                 return 1;
             }
 
-            var procesoPaginado = this.paginarProceso(proceso,this.segmentos[0].tamano);
+            var procesoPaginado = this.paginarProceso(proceso, this.segmentos[0].tamano);
             return this.paginacion(procesoPaginado);
+        }
+
+        /// Segmentación
+        if (metodo == 5) {
+            if (this.getMemoriaDisponible() == 0) {
+                return 0;
+            }
+            if (this.getMemoriaDisponible() < proceso.tamano) {
+                return 1;
+            }
+
+            return this.segmentarProceso(proceso, seleccionAjuste);
         }
 
         /// Metodo estatico fijo
@@ -221,9 +244,8 @@ class Memoria {
         return 0;
     }
 
-    paginacion(paginasProceso){
-        
-        for (let index2 = 0;  index2 < paginasProceso.length; index2++){
+    paginacion(paginasProceso) {
+        for (let index2 = 0; index2 < paginasProceso.length; index2++) {
             for (let index = 0; index < this.segmentos.length; index++) {
                 const segmento = this.segmentos[index];
 
@@ -237,15 +259,44 @@ class Memoria {
 
     }
 
-    paginarProceso(proceso, tamanoPagina){
-        
+    paginarProceso(proceso, tamanoPagina) {
         var pagProceso = Math.ceil(proceso.tamano / tamanoPagina);
         var arrProcesos = [];
-        
-        for (let index = 0; index < pagProceso; index++){
-            arrProcesos.push({"id": proceso.id, "nombre": proceso.nombre + index,"tamano": tamanoPagina});
+
+        for (let index = 0; index < pagProceso; index++) {
+            arrProcesos.push({ "id": proceso.id, "nombre": proceso.nombre + index, "tamano": tamanoPagina });
         }
         return arrProcesos;
+    }
+
+    segmentarProceso(proceso, seleccionAjuste) {
+        var resultado = null;
+        if (seleccionAjuste == 'primer') {
+            resultado = this.primerAjuste({ "id": proceso.id, "nombre": proceso.nombre + " - BSS", "tamano": proceso.bss });
+            this.dividirMemoria();
+            resultado = this.primerAjuste({ "id": proceso.id, "nombre": proceso.nombre + " - Data", "tamano": proceso.data });
+            this.dividirMemoria();
+            resultado = this.primerAjuste({ "id": proceso.id, "nombre": proceso.nombre + " - Text", "tamano": proceso.text });
+        } else if (seleccionAjuste == 'peor') {
+            resultado = this.peorAjuste({ "id": proceso.id, "nombre": proceso.nombre + " - BSS", "tamano": proceso.bss });
+            this.dividirMemoria();
+            resultado = this.peorAjuste({ "id": proceso.id, "nombre": proceso.nombre + " - Data", "tamano": proceso.data });
+            this.dividirMemoria();
+            resultado = this.peorAjuste({ "id": proceso.id, "nombre": proceso.nombre + " - Text", "tamano": proceso.text });
+        } else if (seleccionAjuste == 'mejor') {
+            resultado = this.mejorAjuste({ "id": proceso.id, "nombre": proceso.nombre + " - BSS", "tamano": proceso.bss });
+            this.dividirMemoria();
+            resultado = this.mejorAjuste({ "id": proceso.id, "nombre": proceso.nombre + " - Data", "tamano": proceso.data });
+            this.dividirMemoria();
+            resultado = this.mejorAjuste({ "id": proceso.id, "nombre": proceso.nombre + " - Text", "tamano": proceso.text });
+        }
+
+        /// Sí hubo algún error en el llenadod el proceso
+        if (resultado == 1 || resultado == 0) {
+            return resultado;
+        }
+
+        return this.dividirMemoria();
     }
 
     dividirMemoria() {
