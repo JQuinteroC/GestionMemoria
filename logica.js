@@ -39,6 +39,7 @@ var particionesVariables = [1, 2, 2, 3, 3, 4]
 var gestionMemoria = 0;
 var programasEjecutados = [];
 var segmentosEjecutados = [];
+var programasTTP = [];
 var memoria = new Memoria();
 var idProceso = 0;
 var colores = [];
@@ -190,6 +191,32 @@ function llenarSegmentos() {
         btn.innerHTML = fila;
         document.getElementById("segmentos").appendChild(btn);
     };
+function llenarTpps(){
+    document.getElementById("tpps").replaceChildren();
+
+    for (let i = 0; i < programasTTP.length; i++) {
+        const programa = programasTTP[i];
+        var marco = determinarMarco(programa.nombre);
+        console.log(marco);
+
+        var fila = "<tr><td>" + programa.id + "</td><td>" + programa.nombre + "</td><td>" + programa.pagina + "</td><td>"+ componentToHex(marco) +"</td><td>"+"<button class='btn btnApagar'" + " value='" + i + "'>Apagar</button>" + "</tr>";
+        
+        var btn = document.createElement("TR");
+        btn.innerHTML = fila;
+        document.getElementById("tpps").appendChild(btn);
+    }
+}
+
+function determinarMarco(nombreProceso){
+    
+    var segmentos = memoria.getSegmentos();
+    var marco = 0;
+    for (let index = 0; index < segmentos.length; index++){
+        if (nombreProceso === segmentos[index].proceso.nombre){
+            return marco = index;
+        }
+    } 
+    
 }
 
 function limpiarMemoria() {
@@ -537,7 +564,7 @@ function agregarListener() {
 
                 document.getElementById("contMetodos").replaceChildren();
                 const confPagina = "<div>Tamaño de la pagina</div>" +
-                    "<input type='text' name='tamanoPagina' id='tamanoPagina' autocomplete='off' placeholder='Tamano en KiB'>" + "</input>";
+                    "<input type='text' name='tamanoPagina' id='tamanoPagina' autocomplete='off' placeholder='Tamano en Bytes'>" + "</input>";
                 var btn = document.createElement("DIV");
                 btn.innerHTML = confPagina;
                 document.getElementById("contMetodos").appendChild(btn);
@@ -603,6 +630,11 @@ function ejecutarProceso(proceso) {
         var procesoGuardado = memoria.getProceso(idProceso + 1);
         idProceso += 1;
         llenarMarcos();
+
+        for(let index = 0; index < procesoGuardado.length; index++ ){
+            programasTTP.push({"id": procesoGuardado[index].proceso.id, "nombre": procesoGuardado[index].proceso.nombre, "pagina": index});
+        }
+        llenarTpps();
     }
 
     dibujarProcesos();
