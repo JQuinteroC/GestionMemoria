@@ -86,7 +86,7 @@ class Memoria {
         }
     }
 
-    eliminarProcesoPag(id){
+    eliminarProcesoPag(id) {
         for (let index = 0; index < this.segmentos.length; index++) {
             const element = this.segmentos[index];
 
@@ -96,6 +96,29 @@ class Memoria {
                 }
             }
         }
+        this.dividirMemoria();
+    }
+
+    cabeSegmento(proceso) {
+        var cabe = false;
+        var segmentosLibres = [];
+        for (let index = 0; index < this.segmentos.length; index++) {
+            const segmento = this.segmentos[index];
+            if (segmento.proceso == null) {
+                segmentosLibres.push(segmento);
+            }
+        }
+
+        for (let index = 0; index < segmentosLibres.length; index++) {
+            const segmento = segmentosLibres[index];
+            if (segmento.tamano >= proceso.tamano) {
+                cabe = true;
+                break;
+            }
+            cabe = false;
+        }
+
+        return cabe;
     }
 
     insertarProceso(proceso, metodo, seleccionAjuste) {
@@ -283,24 +306,65 @@ class Memoria {
 
     segmentarProceso(proceso, seleccionAjuste) {
         var resultado = null;
+        var tamanoInsuficiente = false;
         if (seleccionAjuste == 'primer') {
+            if (!this.cabeSegmento({ "tamano": proceso.bss })) {
+                tamanoInsuficiente = true;
+            }
             resultado = this.primerAjuste({ "id": proceso.id, "nombre": proceso.nombre + " - BSS", "tamano": proceso.bss });
             this.dividirMemoria();
+
+            if (!this.cabeSegmento({ "tamano": proceso.data })) {
+                tamanoInsuficiente = true;
+            }
             resultado = this.primerAjuste({ "id": proceso.id, "nombre": proceso.nombre + " - Data", "tamano": proceso.data });
             this.dividirMemoria();
+
+            if (!this.cabeSegmento({ "tamano": proceso.text })) {
+                tamanoInsuficiente = true;
+            }
             resultado = this.primerAjuste({ "id": proceso.id, "nombre": proceso.nombre + " - Text", "tamano": proceso.text });
+
         } else if (seleccionAjuste == 'peor') {
+            if (!this.cabeSegmento({ "tamano": proceso.bss })) {
+                tamanoInsuficiente = true;
+            }
             resultado = this.peorAjuste({ "id": proceso.id, "nombre": proceso.nombre + " - BSS", "tamano": proceso.bss });
             this.dividirMemoria();
+
+            if (!this.cabeSegmento({ "tamano": proceso.data })) {
+                tamanoInsuficiente = true;
+            }
             resultado = this.peorAjuste({ "id": proceso.id, "nombre": proceso.nombre + " - Data", "tamano": proceso.data });
             this.dividirMemoria();
+
+            if (!this.cabeSegmento({ "tamano": proceso.text })) {
+                tamanoInsuficiente = true;
+            }
             resultado = this.peorAjuste({ "id": proceso.id, "nombre": proceso.nombre + " - Text", "tamano": proceso.text });
+
         } else if (seleccionAjuste == 'mejor') {
+            if (!this.cabeSegmento({ "tamano": proceso.bss })) {
+                tamanoInsuficiente = true;
+            }
             resultado = this.mejorAjuste({ "id": proceso.id, "nombre": proceso.nombre + " - BSS", "tamano": proceso.bss });
             this.dividirMemoria();
+
+            if (!this.cabeSegmento({ "tamano": proceso.data })) {
+                tamanoInsuficiente = true;
+            }
             resultado = this.mejorAjuste({ "id": proceso.id, "nombre": proceso.nombre + " - Data", "tamano": proceso.data });
             this.dividirMemoria();
+
+            if (!this.cabeSegmento({ "tamano": proceso.text })) {
+                tamanoInsuficiente = true;
+            }
             resultado = this.mejorAjuste({ "id": proceso.id, "nombre": proceso.nombre + " - Text", "tamano": proceso.text });
+        }
+
+        if (tamanoInsuficiente) {
+            this.eliminarProcesoPag(proceso.id);
+            resultado = 1;
         }
 
         /// Sí hubo algún error en el llenadod el proceso
