@@ -86,6 +86,18 @@ class Memoria {
         }
     }
 
+    eliminarProcesoPag(id){
+        for (let index = 0; index < this.segmentos.length; index++) {
+            const element = this.segmentos[index];
+
+            if (element.proceso != null) {
+                if (element.proceso.id == id) {
+                    this.segmentos[index].proceso = null;
+                }
+            }
+        }
+    }
+
     insertarProceso(proceso, metodo, seleccionAjuste) {
         /// Paginacion
         if (metodo == 6) {

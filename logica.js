@@ -181,7 +181,6 @@ function llenarSegmentos() {
 
 
     document.getElementById("ejecucion").replaceChildren();
-    console.log(segmentosEjecutados)
     for (let i = 0; i < segmentosEjecutados.length; i++) {
         const programa = segmentosEjecutados[i];
 
@@ -198,8 +197,8 @@ function llenarTpps(){
 
     for (let i = 0; i < programasTTP.length; i++) {
         const programa = programasTTP[i];
+        console.log(programasTTP);
         var marco = determinarMarco(programa.nombre);
-        console.log(marco);
 
         var fila = "<tr><td>" + programa.id + "</td><td>" + programa.nombre + "</td><td>" + programa.pagina + "</td><td>"+ componentToHex(marco) +"</td><td>"+"<button class='btn btnApagar'" + " value='" + i + "'>Apagar</button>" + "</tr>";
         
@@ -213,9 +212,14 @@ function determinarMarco(nombreProceso){
     
     var segmentos = memoria.getSegmentos();
     var marco = 0;
+
     for (let index = 0; index < segmentos.length; index++){
-        if (nombreProceso === segmentos[index].proceso.nombre){
-            return marco = index;
+        if(segmentos[index].proceso == null){
+            console.log("null");
+        }else{
+            if (nombreProceso === segmentos[index].proceso.nombre){
+                return marco = index;
+            }
         }
     } 
     
@@ -435,6 +439,41 @@ function agregarListener() {
         ejecutarProceso($tds);
     });
 
+    //// Detener programas en ejecución paginación
+    $('#tablaTPP').on('click','.btnApagar', function (event) {
+        limpiarMemoria();
+        switch (gestionMemoria) {
+            case 6:
+                var tamPagina = document.getElementsByName("tamanoPagina");
+                const mega = 1048576;
+                var cantParticiones = (mega * 15) / tamPagina[0].value;
+
+                dibujarMemoria(cantParticiones, gestionMemoria);
+
+                break;
+        }
+        dibujarProceso("000000", "SO", 1048576);
+
+        var $row = $(this).closest("tr"),
+            $tds = $row.find("td");
+
+        memoria.eliminarProcesoPag($tds[0].textContent);
+
+        programasTTP = removeItemFromArr(programasTTP, $tds[0].textContent);
+
+        for (let index = 0; index < programasTTP.length; index++) {
+            const element = programasTTP[index];
+            var proceso = memoria.getProceso(element.id);
+            element.posicion = proceso[0].posicion;
+        }
+
+        llenarMarcos();
+
+        llenarTpps();
+
+        dibujarProcesos();
+    })
+
     //// Detener prorgamas en ejecución
     $('#tablaEjecutados').unbind('click');
     $('#tablaEjecutados').on('click', '.btnApagar', function (event) {
@@ -620,7 +659,6 @@ function ejecutarProceso(proceso) {
 
         idProceso += 1;
         procesoGuardado.forEach(procesog => {
-            console.log(procesog)
             var parte = procesog.proceso.nombre.split(" - ")
             segmentosEjecutados.push({"id": idProceso, "nombre": proceso[0].textContent, "parte": parte[1], "tamano": procesog.tamano, "posicion": procesog.posicion});
         });
