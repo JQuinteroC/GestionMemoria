@@ -198,7 +198,7 @@ function llenarTpps(){
     for (let i = 0; i < programasTTP.length; i++) {
         const programa = programasTTP[i];
         console.log(programasTTP);
-        var marco = determinarMarco(programa.nombre);
+        var marco = determinarMarco(programa.nombre, programa.id);
 
         var fila = "<tr><td>" + programa.id + "</td><td>" + programa.nombre + "</td><td>" + programa.pagina + "</td><td>"+ componentToHex(marco) +"</td><td>"+"<button class='btn btnApagar'" + " value='" + i + "'>Apagar</button>" + "</tr>";
         
@@ -208,7 +208,7 @@ function llenarTpps(){
     }
 }
 
-function determinarMarco(nombreProceso){
+function determinarMarco(nombreProceso, idProceso){
     
     var segmentos = memoria.getSegmentos();
     var marco = 0;
@@ -217,7 +217,7 @@ function determinarMarco(nombreProceso){
         if(segmentos[index].proceso == null){
             console.log("null");
         }else{
-            if (nombreProceso === segmentos[index].proceso.nombre){
+            if (nombreProceso === segmentos[index].proceso.nombre && idProceso === segmentos[index].proceso.id){
                 return marco = index;
             }
         }
