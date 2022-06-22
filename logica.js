@@ -439,19 +439,36 @@ function agregarListener() {
         ejecutarProceso($tds);
     });
 
+    //// Detener programas en ejecución segmentacion
+    $('#tablaSegemetnos').on('click','.btnApagar', function (event){
+        limpiarMemoria();
+        dibujarMemoria(1, 4);
+        dibujarProceso("000000", "SO", 1048576);
+
+        var $row = $(this).closest("tr"),
+            $tds = $row.find("td");
+
+        memoria.eliminarProcesoPag($tds[0].textContent);
+
+        segmentosEjecutados = removeItemFromArr(segmentosEjecutados, $tds[0].textContent);
+
+        llenarSegmentos();
+        llenarLibres();
+
+        dibujarProcesos();
+    })
+
     //// Detener programas en ejecución paginación
     $('#tablaTPP').on('click','.btnApagar', function (event) {
         limpiarMemoria();
-        switch (gestionMemoria) {
-            case 6:
-                var tamPagina = document.getElementsByName("tamanoPagina");
-                const mega = 1048576;
-                var cantParticiones = (mega * 15) / tamPagina[0].value;
 
-                dibujarMemoria(cantParticiones, gestionMemoria);
+        var tamPagina = document.getElementsByName("tamanoPagina");
+        const mega = 1048576;
+        var cantParticiones = (mega * 15) / tamPagina[0].value;
 
-                break;
-        }
+        dibujarMemoria(cantParticiones, gestionMemoria);
+
+
         dibujarProceso("000000", "SO", 1048576);
 
         var $row = $(this).closest("tr"),
